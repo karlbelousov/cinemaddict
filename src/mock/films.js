@@ -72,16 +72,16 @@ const generateFilms = () => {
     totalCommentsCount += filmCommentsCount;
 
     return {
-       id: String(index + 1), // id - просто порядковый номер
-       comments: (hasComments)
+      id: String(index + 1), // id - просто порядковый номер
+      comments: (hasComments)
         ? Array.from(
           {length: filmCommentsCount},
           // ...и раздаём их по порядку с конца
           (_value, commentIndex) => String(totalCommentsCount - commentIndex)
-       ) : [],
-       filmInfo: film,
+        ) : [],
+      filmInfo: film,
     };
   });
-}
+};
 
 export {generateFilms};

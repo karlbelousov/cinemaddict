@@ -1,4 +1,4 @@
-const filmsDetailsFormTemplate = () => (
+export const createFilmDetailsFormTemplate = () => (
   ` <div class="film-details__new-comment">
   <div class="film-details__add-emoji-label"></div>
 
@@ -28,6 +28,5 @@ const filmsDetailsFormTemplate = () => (
     </label>
   </div>
 </div>`
-)
+);
 
-export default filmsDetailsFormTemplate;

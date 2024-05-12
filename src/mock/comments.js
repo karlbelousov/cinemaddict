@@ -1,4 +1,4 @@
-import { getRandomInteger, getRandomValue } from '../utils';
+import { getRandomValue } from '../utils';
 
 const comments = [
   'a film that changed my life, a true masterpiece, post-credit scene was just amazing omg.',
@@ -22,11 +22,10 @@ const emotions = [
 ];
 
 const generateComment = () => ({
-  'id': getRandomInteger(0, 100),
-  'author': getRandomValue(authors),
-  'comment': getRandomValue(comments),
-  'date': '2019-05-11T16:12:32.554Z',
-  'emotion': getRandomValue(emotions)
+  author: getRandomValue(authors),
+  comment: getRandomValue(comments),
+  date: '2019-05-11T16:12:32.554Z',
+  emotion : getRandomValue(emotions)
 });
 
 const getCommentCount = (films) => films.reduce(
