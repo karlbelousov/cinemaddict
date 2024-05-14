@@ -5,15 +5,16 @@ import FilmsListContainerView from '../view/films-list-container-view.js';
 import FilmCardView from '../view/film-card-view.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
 import FilmDetailsView from '../view/films-details-view.js';
+import FilmListEmptyView from '../view/film-list-empty-view.js';
 import { render } from '../render.js';
 import { FILMS_COUNT_PER_STEP } from '../const.js';
 
 export default class FilmsPresenter {
-  #filmsComponent = new FilmsView();
-  #filmsListComponent = new FilmsListView();
-  #filmsListContainerComponent = new FilmsListContainerView();
-  #showMoreButtonComponent = new ShowMoreButtonView();
-  #filmDetailsComponent = null;
+  #films = new FilmsView();
+  #filmsList = new FilmsListView();
+  #filmsListContainer = new FilmsListContainerView();
+  #showMoreButton = new ShowMoreButtonView();
+  #filmDetails = null;
 
   #container = null;
   #filmsModel = null;
@@ -28,19 +29,24 @@ export default class FilmsPresenter {
 
     this.#films = [...this.#filmsModel.films];
 
-    render(new SortView(), this.#container);
-    render(this.#filmsComponent, this.#container);
-    render(this.#filmsListComponent, this.#filmsComponent.element);
-    render(this.#filmsListContainerComponent, this.#filmsListComponent.element);
+    render(this.#films, this.#container);
 
-    this.#films
-    .slice(0, Math.min(this.#films.length, FILMS_COUNT_PER_STEP))
-    .forEach((film) => this.#renderFilm(film, this.#filmsListContainerComponent));
+    if (this.#films.length === 0) {
+      render(new FilmListEmptyView(), this.#films.element);
+    } else {
+      render(new SortView(), this.#container);
+      render(this.#filmsList, this.#films.element);
+      render(this.#filmsListContainer, this.#filmsList.element);
 
-    if (this.#films.length > FILMS_COUNT_PER_STEP) {
-      render(this.#showMoreButtonComponent, this.#filmsListComponent.element);
+      this.#films
+      .slice(0, Math.min(this.#films.length, FILMS_COUNT_PER_STEP))
+      .forEach((film) => this.#renderFilm(film, this.#filmsListContainer));
 
-      this.#showMoreButtonComponent.element.addEventListener('click', this.#handleShowMoreButtonClick)
+      if (this.#films.length > FILMS_COUNT_PER_STEP) {
+        render(this.#showMoreButton, this.#filmsList.element);
+
+      this.#showMoreButton.element.addEventListener('click', this.#handleShowMoreButtonClick)
+    }
     }
   };
 
@@ -48,13 +54,13 @@ export default class FilmsPresenter {
     evt.preventDefault();
     this.#films
     .slice(this.#renderedFilmsCount, this.#renderedFilmsCount + FILMS_COUNT_PER_STEP)
-    .forEach((film) => this.#renderFilm(film, this.#filmsListContainerComponent))
+    .forEach((film) => this.#renderFilm(film, this.#filmsListContainer))
 
     this.#renderedFilmsCount += FILMS_COUNT_PER_STEP;
 
     if (this.#renderedFilmsCount >= this.#films.length) {
-      this.#showMoreButtonComponent.element.remove();
-      this.#showMoreButtonComponent.removeElement();
+      this.#showMoreButton.element.remove();
+      this.#showMoreButton.removeElement();
     }
   }
 
@@ -72,16 +78,16 @@ export default class FilmsPresenter {
 
   #renderFilmDetails = (film) => {
     const comments = [...this.#commentsModel.get(film)];
-    this.#filmDetailsComponent = new FilmDetailsView(film, comments);
+    this.#filmDetails = new FilmDetailsView(film, comments);
 
-    const closeButtonFilmDetails = this.#filmDetailsComponent.element.querySelector('.film-details__close-btn');
+    const closeButtonFilmDetails = this.#filmDetails.element.querySelector('.film-details__close-btn');
 
     closeButtonFilmDetails.addEventListener('click', () => {
       this.#removeFilmDetails();
       document.removeEventListener('keydown', this.#onEscKeyDown);
     });
 
-    render(this.#filmDetailsComponent, this.#container.parentElement);
+    render(this.#filmDetails, this.#container.parentElement);
   };
 
   #addFilmDetails = (film) => {
@@ -90,8 +96,8 @@ export default class FilmsPresenter {
   };
 
   #removeFilmDetails = () => {
-    this.#filmDetailsComponent.element.remove();
-    this.#filmDetailsComponent = null;
+    this.#filmDetails.element.remove();
+    this.#filmDetails = null;
     document.body.classList.remove('hide-overflow');
   };
 
