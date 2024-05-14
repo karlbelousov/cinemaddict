@@ -10,7 +10,7 @@ import { render } from '../render.js';
 import { FILMS_COUNT_PER_STEP } from '../const.js';
 
 export default class FilmsPresenter {
-  #films = new FilmsView();
+  #filmsContainer = new FilmsView();
   #filmsList = new FilmsListView();
   #filmsListContainer = new FilmsListContainerView();
   #showMoreButton = new ShowMoreButtonView();
@@ -19,36 +19,44 @@ export default class FilmsPresenter {
   #container = null;
   #filmsModel = null;
   #commentsModel = null;
-  #films = null;
+
+  #films = [];
+
   #renderedFilmsCount = FILMS_COUNT_PER_STEP;
 
-  init = (container, filmsModel, commentsModel) => {
+  constructor(container,  filmsModel, commentsModel) {
     this.#container = container;
     this.#filmsModel = filmsModel;
     this.#commentsModel = commentsModel;
+  }
 
+  init = () => {
     this.#films = [...this.#filmsModel.films];
+    this.#renderFilmBoard();
+  };
 
-    render(this.#films, this.#container);
+  #renderFilmBoard = () => {
+    render(this.#filmsContainer, this.#container);
 
     if (this.#films.length === 0) {
-      render(new FilmListEmptyView(), this.#films.element);
-    } else {
-      render(new SortView(), this.#container);
-      render(this.#filmsList, this.#films.element);
-      render(this.#filmsListContainer, this.#filmsList.element);
+      render(new FilmListEmptyView(), this.#filmsContainer.element);
+      return;
+    }
 
-      this.#films
-      .slice(0, Math.min(this.#films.length, FILMS_COUNT_PER_STEP))
-      .forEach((film) => this.#renderFilm(film, this.#filmsListContainer));
+    render(new SortView(), this.#container);
+    render(this.#filmsList, this.#filmsContainer.element);
+    render(this.#filmsListContainer, this.#filmsList.element);
 
-      if (this.#films.length > FILMS_COUNT_PER_STEP) {
-        render(this.#showMoreButton, this.#filmsList.element);
+    this.#films
+    .slice(0, Math.min(this.#films.length, FILMS_COUNT_PER_STEP))
+    .forEach((film) => this.#renderFilm(film, this.#filmsListContainer));
+
+    if (this.#films.length > FILMS_COUNT_PER_STEP) {
+      render(this.#showMoreButton, this.#filmsList.element);
 
       this.#showMoreButton.element.addEventListener('click', this.#handleShowMoreButtonClick)
     }
-    }
-  };
+  }
 
   #handleShowMoreButtonClick = (evt) => {
     evt.preventDefault();
