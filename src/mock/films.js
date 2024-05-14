@@ -1,5 +1,5 @@
 import { getRandomInteger, getRandomValue } from '../utils';
-import { FILMS_COUNT, MAX_COMMENTS_ON_FILM } from '../const';
+import { MAX_COMMENTS_ON_FILM } from '../const';
 
 const titles = [
   'Country On Him',
@@ -56,7 +56,7 @@ const generateFilm = () => ({
 
 const generateFilms = () => {
    // Создаем массив с данными о фильмах
-   const films = Array.from({length: FILMS_COUNT}, generateFilm);
+   const films = Array.from({length: 22}, generateFilm);
 
    // Ключ totalCommentsCount нужен нам для того, чтобы у фильмов не повторялись id комментариев, ведь не может быть, чтобы один комментарий относился к нескольким фильмам
   let totalCommentsCount = 0;

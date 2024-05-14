@@ -6,17 +6,20 @@ import FilmCardView from '../view/film-card-view.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
 import FilmDetailsView from '../view/films-details-view.js';
 import { render } from '../render.js';
+import { FILMS_COUNT_PER_STEP } from '../const.js';
 
 export default class FilmsPresenter {
   #filmsComponent = new FilmsView();
   #filmsListComponent = new FilmsListView();
   #filmsListContainerComponent = new FilmsListContainerView();
+  #showMoreButtonComponent = new ShowMoreButtonView();
   #filmDetailsComponent = null;
 
   #container = null;
   #filmsModel = null;
   #commentsModel = null;
   #films = null;
+  #renderedFilmsCount = FILMS_COUNT_PER_STEP;
 
   init = (container, filmsModel, commentsModel) => {
     this.#container = container;
@@ -30,12 +33,30 @@ export default class FilmsPresenter {
     render(this.#filmsListComponent, this.#filmsComponent.element);
     render(this.#filmsListContainerComponent, this.#filmsListComponent.element);
 
-    this.#films.forEach((film) => {
-      this.#renderFilm(film, this.#filmsListContainerComponent);
-    });
+    this.#films
+    .slice(0, Math.min(this.#films.length, FILMS_COUNT_PER_STEP))
+    .forEach((film) => this.#renderFilm(film, this.#filmsListContainerComponent));
 
-    render(new ShowMoreButtonView(), this.#filmsListComponent.element);
+    if (this.#films.length > FILMS_COUNT_PER_STEP) {
+      render(this.#showMoreButtonComponent, this.#filmsListComponent.element);
+
+      this.#showMoreButtonComponent.element.addEventListener('click', this.#handleShowMoreButtonClick)
+    }
   };
+
+  #handleShowMoreButtonClick = (evt) => {
+    evt.preventDefault();
+    this.#films
+    .slice(this.#renderedFilmsCount, this.#renderedFilmsCount + FILMS_COUNT_PER_STEP)
+    .forEach((film) => this.#renderFilm(film, this.#filmsListContainerComponent))
+
+    this.#renderedFilmsCount += FILMS_COUNT_PER_STEP;
+
+    if (this.#renderedFilmsCount >= this.#films.length) {
+      this.#showMoreButtonComponent.element.remove();
+      this.#showMoreButtonComponent.removeElement();
+    }
+  }
 
   #renderFilm(film, container)  {
     const filmCardComponent = new FilmCardView(film);
