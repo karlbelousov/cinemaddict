@@ -54,12 +54,11 @@ export default class FilmsPresenter {
     if (this.#films.length > FILMS_COUNT_PER_STEP) {
       render(this.#showMoreButton, this.#filmsList.element);
 
-      this.#showMoreButton.element.addEventListener('click', this.#handleShowMoreButtonClick)
+      this.#showMoreButton.setButtonClickHandler(() => this.#handleShowMoreButtonClick());
     }
   }
 
-  #handleShowMoreButtonClick = (evt) => {
-    evt.preventDefault();
+  #handleShowMoreButtonClick = () => {
     this.#films
     .slice(this.#renderedFilmsCount, this.#renderedFilmsCount + FILMS_COUNT_PER_STEP)
     .forEach((film) => this.#renderFilm(film, this.#filmsListContainer))
@@ -74,12 +73,8 @@ export default class FilmsPresenter {
 
   #renderFilm(film, container)  {
     const filmCardComponent = new FilmCardView(film);
-    const filmCardLink = filmCardComponent.element.querySelector('a');
 
-    filmCardLink.addEventListener('click', () => {
-      this.#addFilmDetails(film);
-      document.addEventListener('keydown', this.#onEscKeyDown);
-    });
+    filmCardComponent.setFilmCardClickHandler(() => this.#addFilmDetails(film));
 
     render(filmCardComponent, container.element);
   }
@@ -88,22 +83,19 @@ export default class FilmsPresenter {
     const comments = [...this.#commentsModel.get(film)];
     this.#filmDetails = new FilmDetailsView(film, comments);
 
-    const closeButtonFilmDetails = this.#filmDetails.element.querySelector('.film-details__close-btn');
-
-    closeButtonFilmDetails.addEventListener('click', () => {
-      this.#removeFilmDetails();
-      document.removeEventListener('keydown', this.#onEscKeyDown);
-    });
+    this.#filmDetails.setFilmDetailsCloseButton(() => this.#removeFilmDetails());
 
     render(this.#filmDetails, this.#container.parentElement);
   };
 
   #addFilmDetails = (film) => {
     this.#renderFilmDetails(film);
+    document.addEventListener('keydown', this.#onEscKeyDown);
     document.body.classList.add('hide-overflow');
   };
 
   #removeFilmDetails = () => {
+    document.removeEventListener('keydown', this.#onEscKeyDown);
     this.#filmDetails.element.remove();
     this.#filmDetails = null;
     document.body.classList.remove('hide-overflow');

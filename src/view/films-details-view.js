@@ -46,4 +46,13 @@ export default class FilmDetailsView extends AbstractView {
   get template() {
     return createFilmDetailsTemplate(this.#film, this.#comments);
   }
+
+  setFilmDetailsCloseButton = (callback) => {
+    this._callback.closeButtonclick = callback;
+    this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#closeButtonHandler);
+  }
+
+  #closeButtonHandler = () => {
+    this._callback.closeButtonclick();
+  }
 }
