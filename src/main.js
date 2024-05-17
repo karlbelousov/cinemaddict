@@ -1,8 +1,8 @@
+import {render} from './framework/render.js';
 import HeaderProfileView from './view/header-profile-view.js';
 import FilterView from './view/filter-view.js';
 import FooterStatistics from './view/footer-statistics-view.js';
 import FilmsPresenter from './presenter/films-presenter.js';
-import {render} from './render.js';
 import FilmsModel from './model/fillms-model.js';
 import CommentsModel from './model/comments-model.js';
 
