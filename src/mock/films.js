@@ -1,4 +1,4 @@
-import { getRandomInteger, getRandomValue } from '../utils';
+import { getRandomInteger, getRandomValue } from '../utils/common.js';
 import { MAX_COMMENTS_ON_FILM } from '../const';
 
 const titles = [

@@ -1,4 +1,4 @@
-import {render} from '../framework/render.js';
+import {render, remove} from '../framework/render.js';
 import SortView from '../view/sort-view.js';
 import FilmsView from '../view/films-view.js';
 import FilmsListView from '../view/films-list-view.js';
@@ -66,8 +66,7 @@ export default class FilmsPresenter {
     this.#renderedFilmsCount += FILMS_COUNT_PER_STEP;
 
     if (this.#renderedFilmsCount >= this.#films.length) {
-      this.#showMoreButton.element.remove();
-      this.#showMoreButton.removeElement();
+      remove(this.#showMoreButton);
     }
   }
 
@@ -96,8 +95,7 @@ export default class FilmsPresenter {
 
   #removeFilmDetails = () => {
     document.removeEventListener('keydown', this.#onEscKeyDown);
-    this.#filmDetails.element.remove();
-    this.#filmDetails = null;
+    remove(this.#filmDetails);
     document.body.classList.remove('hide-overflow');
   };
 
