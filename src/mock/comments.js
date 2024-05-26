@@ -1,31 +1,27 @@
-import { getRandomValue } from '../utils/common.js';
+import {getRandomInteger, getRandomValue} from '../utils/common.js';
+import {
+  DaysDuration,
+  names,
+  surnames,
+  emotions,
+  comment,
+} from './const.js';
 
-const comments = [
-  'a film that changed my life, a true masterpiece, post-credit scene was just amazing omg.',
-  'Interesting setting and a good cast',
-  'Booooooooooring',
-  'Very very old. Meh',
-  'Almost two hours? Seriously?'
-];
+const getDate = () => {
+  const date = new Date();
 
-const authors = [
-  'John Doe',
-  'Ilya O\'Reilly',
-  'Tim Macoveev'
-];
+  date.setDate(
+    date.getDate() - getRandomInteger(DaysDuration.MIN, DaysDuration.MAX)
+  );
 
-const emotions = [
-  'smile',
-  'sleeping',
-  'puke',
-  'angry'
-];
+  return date.toISOString();
+};
 
 const generateComment = () => ({
-  author: getRandomValue(authors),
-  comment: getRandomValue(comments),
-  date: '2019-05-11T16:12:32.554Z',
-  emotion : getRandomValue(emotions)
+  author: `${getRandomValue(names)} ${getRandomValue(surnames)}`,
+  comment,
+  date: getDate(),
+  emotion: getRandomValue(emotions),
 });
 
 const getCommentCount = (films) => films.reduce(

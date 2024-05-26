@@ -1,4 +1,4 @@
-import {formatStringToDate, formatMinutesToTime} from '../utils/commets.js';
+import {formatStringToDate, formatMinutesToTime} from '../utils/film.js';
 
 const generateNameList = (names) =>
   (names.length < 1)

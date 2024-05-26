@@ -1,57 +1,47 @@
-import { getRandomInteger, getRandomValue } from '../utils/common.js';
-import { MAX_COMMENTS_ON_FILM } from '../const';
+import {getRandomInteger, getRandomValue} from '../utils/common.js';
+import {FILM_COUNT} from '../const.js';
+import {
+  NAME_COUNT, MAX_COMMENTS_ON_FILM, GenreCount, Rating,
+  AgeRating, Runtime, YearsDuration, DaysDuration, DateType,
+  names, surnames, titles, posters, genres, description, countries,
+} from './const.js';
 
-const titles = [
-  'Country On Him',
-  'Raiders With The Carpet',
-  'Guest Who Sold The Darkness',
-];
 
-const alternativeTitles = [
-  'Laziness Who Sold Themselves',
-  'The Great Flamarion',
-  'Sagebrush Trai'
-];
+const getDate = (type) => {
+  const date = new Date();
 
-const posters = [
-  'images/posters/made-for-each-other.png',
-  'images/posters/popeye-meets-sinbad.png',
-  'images/posters/sagebrush-trail.jpg',
-  'images/posters/santa-claus-conquers-the-martians.jpg',
-  'images/posters/the-dance-of-life.jpg',
-  'images/posters/the-great-flamarion.jpg',
-  'images/posters/the-man-with-the-golden-arm.jpg'
-];
+  switch (type) {
+    case DateType.FILM_INFO:
+      date.setFullYear(
+        date.getFullYear() - getRandomInteger(YearsDuration.MIN, YearsDuration.MAX)
+      );
+      break;
+    case DateType.USER_DETAILS:
+      date.setDate(
+        date.getDate() - getRandomInteger(DaysDuration.MIN, DaysDuration.MAX)
+      );
+      break;
+  }
 
-const descriptions = [
-  'Oscar-winning film, a war drama about two young people, from the creators of timeless classic \'Nu, Pogodi!\' and \'Alice in Wonderland\', with the best fight scenes since Bruce Lee',
-  'ligula feugiat eget. Fusce tristique felis at fermentum pharetra.',
-  'Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat',
-  'Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante'
-];
+  return date.toISOString();
+};
 
 const generateFilm = () => ({
   title: getRandomValue(titles),
-  alternativeTitle: getRandomValue(alternativeTitles),
-  totalRating: 5.3,
+  alternativeTitle: getRandomValue(titles),
+  totalRating: getRandomInteger(Rating.MIN, Rating.MAX),
   poster: getRandomValue(posters),
-  ageRating: 0,
-  director: "Tom Ford",
-  writers: [
-    "Takeshi Kitano"
-  ],
-  actors: [
-    "Morgan Freeman"
-  ],
+  ageRating: getRandomInteger(AgeRating.MIN, AgeRating.MAX),
+  director: `${getRandomValue(names)} ${getRandomValue(surnames)}`,
+  writers: Array.from({length: NAME_COUNT}, () => `${getRandomValue(names)} ${getRandomValue(surnames)}`),
+  actors: Array.from({length: NAME_COUNT}, () => `${getRandomValue(names)} ${getRandomValue(surnames)}`),
   release: {
-    date: "2019-05-11T00:00:00.000Z",
-    releaseCountry: "Finland"
+    date: getDate(DateType.FILM_INFO),
+    releaseСountry: getRandomValue(countries)
   },
-  runtime: 77,
-  genre: [
-    "Comedy"
-  ],
-  description: getRandomValue(descriptions)
+  runtime: getRandomInteger(Runtime.MIN, Runtime.MAX),
+  genre:  Array.from({length: getRandomInteger(GenreCount.MIN, GenreCount.MAX)}, () => getRandomValue(genres)),
+  description
 });
 
 const generateFilms = () => {
@@ -60,6 +50,10 @@ const generateFilms = () => {
 
    // Ключ totalCommentsCount нужен нам для того, чтобы у фильмов не повторялись id комментариев, ведь не может быть, чтобы один комментарий относился к нескольким фильмам
   let totalCommentsCount = 0;
+
+  const getWatchingDate = () => getDate(DateType.USER_DETAILS);
+
+  const alreadyWatched = Boolean(getRandomInteger(0, 1));
 
   return films.map((film, index) => {
     const hasComments = getRandomInteger(0, 1);
@@ -80,6 +74,12 @@ const generateFilms = () => {
           (_value, commentIndex) => String(totalCommentsCount - commentIndex)
         ) : [],
       filmInfo: film,
+      userDetails: {
+        watchlis: Boolean(getRandomInteger(0, 1)),
+        alreadyWatched,
+        watchingDate: (alreadyWatched) ? getWatchingDate() : null,
+        favorite: Boolean(getRandomInteger(0, 1))
+      }
     };
   });
 };

@@ -10,6 +10,7 @@ import FilmListEmptyView from '../view/film-list-empty-view.js';
 import { FILMS_COUNT_PER_STEP } from '../const.js';
 
 export default class FilmsPresenter {
+  #sortComponent = new SortView();
   #filmsContainer = new FilmsView();
   #filmsList = new FilmsListView();
   #filmsListContainer = new FilmsListContainerView();
@@ -43,7 +44,7 @@ export default class FilmsPresenter {
       return;
     }
 
-    render(new SortView(), this.#container);
+    render(this.#sortComponent, this.#container);
     render(this.#filmsList, this.#filmsContainer.element);
     render(this.#filmsListContainer, this.#filmsList.element);
 
@@ -66,7 +67,8 @@ export default class FilmsPresenter {
     this.#renderedFilmsCount += FILMS_COUNT_PER_STEP;
 
     if (this.#renderedFilmsCount >= this.#films.length) {
-      remove(this.#showMoreButton);
+      this.#showMoreButton.element.remove();
+      this.#showMoreButton.removeElement();
     }
   }
 
@@ -82,20 +84,22 @@ export default class FilmsPresenter {
     const comments = [...this.#commentsModel.get(film)];
     this.#filmDetails = new FilmDetailsView(film, comments);
 
-    this.#filmDetails.setFilmDetailsCloseButton(() => this.#removeFilmDetails());
+    this.#filmDetails.setFilmDetailsCloseButton(() => {
+      this.#removeFilmDetails();
+      document.addEventListener('keydown', this.#onEscKeyDown);
+    });
 
     render(this.#filmDetails, this.#container.parentElement);
   };
 
   #addFilmDetails = (film) => {
     this.#renderFilmDetails(film);
-    document.addEventListener('keydown', this.#onEscKeyDown);
     document.body.classList.add('hide-overflow');
   };
 
   #removeFilmDetails = () => {
-    document.removeEventListener('keydown', this.#onEscKeyDown);
     remove(this.#filmDetails);
+    this.#filmDetails = null;
     document.body.classList.remove('hide-overflow');
   };
 
@@ -103,6 +107,7 @@ export default class FilmsPresenter {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
       this.#removeFilmDetails();
+      document.removeEventListener('keydown', this.#onEscKeyDown);
     }
   };
 }

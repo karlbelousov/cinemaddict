@@ -15,7 +15,6 @@ const formatMinutesToTime = (minutes) => {
     : `${Math.floor(minutes / MINUTES_PER_HOUR)}h ${minutes % MINUTES_PER_HOUR}m`;
 };
 
-
 export {
   formatStringToDateWithTime,
   formatStringToDate,
