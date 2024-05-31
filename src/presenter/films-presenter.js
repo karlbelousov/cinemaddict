@@ -3,10 +3,10 @@ import SortView from '../view/sort-view.js';
 import FilmsView from '../view/films-view.js';
 import FilmsListView from '../view/films-list-view.js';
 import FilmsListContainerView from '../view/films-list-container-view.js';
-import FilmCardView from '../view/film-card-view.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
 import FilmDetailsView from '../view/films-details-view.js';
 import FilmListEmptyView from '../view/film-list-empty-view.js';
+import FilmPresenter from './film-presenter.js';
 import { FILMS_COUNT_PER_STEP } from '../const.js';
 
 export default class FilmsPresenter {
@@ -90,9 +90,8 @@ export default class FilmsPresenter {
   }
 
   #renderFilm = (film) => {
-    const filmCardComponent = new FilmCardView(film);
-    filmCardComponent.setFilmCardClickHandler(() => this.#addFilmDetails(film));
-    render(filmCardComponent, this.#filmsListContainer.element);
+    const fillmPresenter = new FilmPresenter(this.#filmsListContainer, this.#addFilmDetails);
+    fillmPresenter.init(film);
   }
 
   #renderFilmDetails = (film) => {
@@ -101,9 +100,8 @@ export default class FilmsPresenter {
 
     this.#filmDetails.setFilmDetailsCloseButton(() => {
       this.#removeFilmDetails();
-      document.addEventListener('keydown', this.#onEscKeyDown);
-    });
-
+    })
+    document.addEventListener('keydown', this.#onEscKeyDown);
     render(this.#filmDetails, this.#container.parentElement);
   };
 
@@ -126,4 +124,3 @@ export default class FilmsPresenter {
     }
   };
 }
-
