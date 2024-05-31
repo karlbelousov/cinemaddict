@@ -15,6 +15,7 @@ export default class FilmsPresenter {
   #filmsList = new FilmsListView();
   #filmsListContainer = new FilmsListContainerView();
   #showMoreButton = new ShowMoreButtonView();
+  #filmListTmpty = new FilmListEmptyView();
   #filmDetails = null;
 
   #container = null;
@@ -37,47 +38,61 @@ export default class FilmsPresenter {
   };
 
   #renderFilmBoard = () => {
+    this.#renderSort();
     render(this.#filmsContainer, this.#container);
 
     if (this.#films.length === 0) {
-      render(new FilmListEmptyView(), this.#filmsContainer.element);
+      this.#renderFilmListEmpty();
       return;
     }
 
+    this.#renderFilmList();
+  }
+
+  #renderSort = () => {
     render(this.#sortComponent, this.#container);
+  }
+
+  #renderFilmListEmpty = () => {
+    render(this.#filmListTmpty, this.#filmsContainer.element);
+  }
+
+  #renderFilmList = () => {
     render(this.#filmsList, this.#filmsContainer.element);
     render(this.#filmsListContainer, this.#filmsList.element);
 
-    this.#films
-    .slice(0, Math.min(this.#films.length, FILMS_COUNT_PER_STEP))
-    .forEach((film) => this.#renderFilm(film, this.#filmsListContainer));
+    this.#renderFilms(0, Math.min(this.#films.length, FILMS_COUNT_PER_STEP))
 
     if (this.#films.length > FILMS_COUNT_PER_STEP) {
-      render(this.#showMoreButton, this.#filmsList.element);
-
-      this.#showMoreButton.setButtonClickHandler(() => this.#handleShowMoreButtonClick());
+      this.#renderShowMoreButton();
     }
   }
 
-  #handleShowMoreButtonClick = () => {
+  #renderShowMoreButton = () => {
+    render(this.#showMoreButton, this.#filmsList.element);
+    this.#showMoreButton.setButtonClickHandler(() => this.#handleShowMoreButtonClick());
+  }
+
+  #renderFilms = (from, to) => {
     this.#films
-    .slice(this.#renderedFilmsCount, this.#renderedFilmsCount + FILMS_COUNT_PER_STEP)
-    .forEach((film) => this.#renderFilm(film, this.#filmsListContainer))
+    .slice(from, to)
+    .forEach((film) => this.#renderFilm(film));
+  }
+
+  #handleShowMoreButtonClick = () => {
+    this.#renderFilms(this.#renderedFilmsCount, this.#renderedFilmsCount + FILMS_COUNT_PER_STEP);
 
     this.#renderedFilmsCount += FILMS_COUNT_PER_STEP;
 
     if (this.#renderedFilmsCount >= this.#films.length) {
-      this.#showMoreButton.element.remove();
-      this.#showMoreButton.removeElement();
+      remove(this.#showMoreButton)
     }
   }
 
-  #renderFilm(film, container)  {
+  #renderFilm = (film) => {
     const filmCardComponent = new FilmCardView(film);
-
     filmCardComponent.setFilmCardClickHandler(() => this.#addFilmDetails(film));
-
-    render(filmCardComponent, container.element);
+    render(filmCardComponent, this.#filmsListContainer.element);
   }
 
   #renderFilmDetails = (film) => {
