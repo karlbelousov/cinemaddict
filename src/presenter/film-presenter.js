@@ -1,4 +1,4 @@
-import {render, remove} from '../framework/render.js';
+import {render, replace, remove} from '../framework/render.js';
 import FilmCardView from '../view/film-card-view.js';
 
 export default class FilmPresenter {
@@ -13,9 +13,27 @@ export default class FilmPresenter {
   }
 
   init = (film) => {
+    const prevFilmCard = this.#filmCard;
+
     this.#film = film;
     this.#filmCard = new FilmCardView(this.#film);
     this.#filmCard.setFilmCardClickHandler(() => this.#clickCarHandler(film));
-    render(this.#filmCard, this.#container.element);
-  }
+
+    // Проверка на наличие в DOM необходима,
+    // чтобы не пытаться заменить то, что не было отрисовано
+    if (prevFilmCard === null) {
+      render(this.#filmCard, this.#container.element);
+      return;
+    }
+
+    if (this.#container.contains(prevFilmCard.element)) {
+      replace(this.#filmCard, prevFilmCard);
+    }
+
+    remove(prevFilmCard);
+  };
+
+  destroy = () => {
+    remove(this.#filmCard);
+  };
 }
