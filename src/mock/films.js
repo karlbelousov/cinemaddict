@@ -1,10 +1,10 @@
 import {getRandomInteger, getRandomValue} from '../utils/common.js';
-import {FILM_COUNT} from '../const.js';
 import {
   NAME_COUNT, MAX_COMMENTS_ON_FILM, GenreCount, Rating,
   AgeRating, Runtime, YearsDuration, DaysDuration, DateType,
   names, surnames, titles, posters, genres, description, countries,
 } from './const.js';
+import {nanoid} from 'nanoid';
 
 
 const getDate = (type) => {
@@ -66,7 +66,7 @@ const generateFilms = () => {
     totalCommentsCount += filmCommentsCount;
 
     return {
-      id: String(index + 1), // id - просто порядковый номер
+      id: nanoid(), // id - просто порядковый номер
       comments: (hasComments)
         ? Array.from(
           {length: filmCommentsCount},
