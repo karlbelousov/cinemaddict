@@ -3,6 +3,12 @@ const MAX_COMMENTS_ON_FILM = 7;
 
 const FILTER_TYPE_ALL_NAME = 'All movies';
 
+const SortType = {
+  DEFAULT: 'default',
+  DATE: 'date',
+  RATING: 'rating'
+}
+
 const FilterType = {
   ALL: 'all',
   WATCHLIST: 'watchlist',
@@ -29,5 +35,6 @@ export {
    UserStatusTitle,
    UserStatusValue,
    FILTER_TYPE_ALL_NAME,
-   FilterType
+   FilterType,
+   SortType
   };
