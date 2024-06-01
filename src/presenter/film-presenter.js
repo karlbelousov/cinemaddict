@@ -19,9 +19,10 @@ export default class FilmPresenter {
   }
 
   init = (film) => {
+    this.#film = film;
+
     const prevFilmCard = this.#filmCard;
 
-    this.#film = film;
     this.#filmCard = new FilmCardView(this.#film);
     this.#filmCard.setFilmCardClickHandler(() => {
       this.#clickCarHandler(this.#film);

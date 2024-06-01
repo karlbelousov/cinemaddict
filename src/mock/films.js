@@ -65,7 +65,7 @@ const generateFilms = () => {
     totalCommentsCount += filmCommentsCount;
 
     return {
-      id: nanoid(), // id - просто порядковый номер
+      id: index + 1, // id - просто порядковый номер
       comments: (hasComments)
         ? Array.from(
           {length: filmCommentsCount},

@@ -52,7 +52,34 @@ export default class FilmDetailsView extends AbstractView {
     this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#closeButtonHandler);
   }
 
+  setWatchlistButtonClickHandler = (callback) => {
+    this._callback.watchlistButtonClick = callback;
+    this.element.querySelector('.film-details__control-button--watchlist').addEventListener('click', this.#watchlistClickHandler)
+  }
+
+  setWatchedButtonClickHandler = (callback) => {
+    this._callback.watchedButtonClick = callback;
+    this.element.querySelector('.film-details__control-button--watched').addEventListener('click', this.#watchedClickHandler)
+  }
+
+  setFavoriteButtonClickHandler = (callback) => {
+    this._callback.favoriteButtonClick = callback;
+    this.element.querySelector('.film-details__control-button--favorite').addEventListener('click', this.#favoriteClickHandler)
+  }
+
   #closeButtonHandler = () => {
     this._callback.closeButtonclick();
+  }
+
+  #watchlistClickHandler = () => {
+    this._callback.watchlistButtonClick();
+  }
+
+  #watchedClickHandler = () => {
+    this._callback.watchedButtonClick();
+  }
+
+  #favoriteClickHandler = () => {
+    this._callback.favoriteButtonClick();
   }
 }
