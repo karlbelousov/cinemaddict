@@ -4,7 +4,6 @@ import {
   AgeRating, Runtime, YearsDuration, DaysDuration, DateType,
   names, surnames, titles, posters, genres, description, countries,
 } from './const.js';
-import {nanoid} from 'nanoid';
 
 
 const getDate = (type) => {

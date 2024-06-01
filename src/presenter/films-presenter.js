@@ -1,4 +1,3 @@
-import {render, remove} from '../framework/render.js';
 import SortView from '../view/sort-view.js';
 import FilmsView from '../view/films-view.js';
 import FilmsListView from '../view/films-list-view.js';
@@ -7,6 +6,8 @@ import ShowMoreButtonView from '../view/show-more-button-view.js';
 import FilmDetailsView from '../view/films-details-view.js';
 import FilmListEmptyView from '../view/film-list-empty-view.js';
 import FilmPresenter from './film-presenter.js';
+
+import {render, remove} from '../framework/render.js';
 import { updateItem } from '../utils/common.js';
 import { FILMS_COUNT_PER_STEP } from '../const.js';
 
@@ -40,14 +41,13 @@ export default class FilmsPresenter {
   };
 
   #renderFilmBoard = () => {
-    this.#renderSort();
-    render(this.#filmsContainer, this.#container);
-
-    if (this.#films.length === 0) {
+   if (this.#films.length === 0) {
       this.#renderFilmListEmpty();
       return;
     }
 
+    this.#renderSort();
+    render(this.#filmsContainer, this.#container);
     this.#renderFilmList();
   }
 
@@ -93,20 +93,21 @@ export default class FilmsPresenter {
     .forEach((film) => this.#renderFilm(film));
   }
 
+  #renderFilm = (film) => {
+    const filmPresenter = new FilmPresenter(this.#filmsListContainer, this.#addFilmDetails, this.#onEscKeyDown, this.#handleFilmChange);
+    filmPresenter.init(film);
+    this.#filmPresenter.set(film.id, filmPresenter);
+  }
+
   #handleShowMoreButtonClick = () => {
     this.#renderFilms(this.#renderedFilmsCount, this.#renderedFilmsCount + FILMS_COUNT_PER_STEP);
 
     this.#renderedFilmsCount += FILMS_COUNT_PER_STEP;
 
     if (this.#renderedFilmsCount >= this.#films.length) {
-      remove(this.#showMoreButton)
+      this.#showMoreButton.element.remove();
+      this.#showMoreButton.removeElement();
     }
-  }
-
-  #renderFilm = (film) => {
-    const filmPresenter = new FilmPresenter(this.#filmsListContainer, this.#addFilmDetails);
-    filmPresenter.init(film);
-    this.#filmPresenter.set(film.id, filmPresenter);
   }
 
   #renderFilmDetails = (film) => {

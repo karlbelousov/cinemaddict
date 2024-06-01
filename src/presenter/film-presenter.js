@@ -2,14 +2,20 @@ import {render, replace, remove} from '../framework/render.js';
 import FilmCardView from '../view/film-card-view.js';
 
 export default class FilmPresenter {
-  #container = null;
+  #filmListContainer = null;
+
   #clickCarHandler = null;
+  #escKeyDownHandler = null;
+  #changeData = null;
+
   #filmCard = null;
   #film = null;
 
-  constructor(container, clickCardHandler) {
-    this.#container = container;
-    this.#clickCarHandler = clickCardHandler
+  constructor(filmListContainer, clickCardHandler, escKeyDownHandler, changeData) {
+    this.#filmListContainer = filmListContainer;
+    this.#clickCarHandler = clickCardHandler;
+    this.#escKeyDownHandler= escKeyDownHandler;
+    this.#changeData = changeData;
   }
 
   init = (film) => {
@@ -17,18 +23,20 @@ export default class FilmPresenter {
 
     this.#film = film;
     this.#filmCard = new FilmCardView(this.#film);
-    this.#filmCard.setFilmCardClickHandler(() => this.#clickCarHandler(film));
+    this.#filmCard.setFilmCardClickHandler(() => {
+      this.#clickCarHandler(this.#film);
+      document.addEventListener('keydown', this.#escKeyDownHandler);
+    });
+    this.#filmCard.setWatchlistButtonClickHandler(this.#watchlistButtonHandler);
+    this.#filmCard.setWatchedButtonClickHandler(this.#watchedButtonHandler);
+    this.#filmCard.setFavoriteButtonClickHandler(this.#favoriteButtonHandler);
 
-    // Проверка на наличие в DOM необходима,
-    // чтобы не пытаться заменить то, что не было отрисовано
     if (prevFilmCard === null) {
-      render(this.#filmCard, this.#container.element);
+      render(this.#filmCard, this.#filmListContainer.element);
       return;
     }
 
-    if (this.#container.contains(prevFilmCard.element)) {
-      replace(this.#filmCard, prevFilmCard);
-    }
+    replace(this.#filmCard, prevFilmCard);
 
     remove(prevFilmCard);
   };
@@ -36,4 +44,34 @@ export default class FilmPresenter {
   destroy = () => {
     remove(this.#filmCard);
   };
+
+  #watchlistButtonHandler = () => {
+    this.#changeData({
+      ...this.#film,
+      userDetails: {
+        ...this.#film.userDetails,
+        watchlist: !this.#film.userDetails.watchlist
+      },
+    })
+  }
+
+  #watchedButtonHandler = () => {
+    this.#changeData({
+      ...this.#film,
+      userDetails: {
+        ...this.#film.userDetails,
+        alreadyWatched: !this.#film.userDetails.alreadyWatched
+      },
+    })
+  }
+
+  #favoriteButtonHandler = () => {
+    this.#changeData({
+      ...this.#film,
+      userDetails: {
+        ...this.#film.userDetails,
+        favorite: !this.#film.userDetails.favorite
+      },
+    })
+  }
 }
