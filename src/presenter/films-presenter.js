@@ -18,7 +18,6 @@ export default class FilmsPresenter {
   #filmsListContainer = new FilmsListContainerView();
   #showMoreButton = new ShowMoreButtonView();
   #filmListTmpty = new FilmListEmptyView();
-  #filmDetails = null;
 
   #container = null;
   #filmsModel = null;
@@ -41,6 +40,7 @@ export default class FilmsPresenter {
 
   init = () => {
     this.#films = [...this.#filmsModel.films];
+
     this.#renderFilmBoard();
   };
 
@@ -58,6 +58,11 @@ export default class FilmsPresenter {
   #handleFilmChange = (updatedFilm) => {
     this.#films = updateItem(this.#films, updatedFilm);
     this.#filmPresenter.get(updatedFilm.id).init(updatedFilm);
+
+    if (this.#filmDetailsPresenter && this.#selectedFilm.id === updatedFilm.id) {
+      this.#selectedFilm = updatedFilm;
+      this.#renderFilmDetails();
+    }
   }
 
   #renderSort = () => {
@@ -125,9 +130,9 @@ export default class FilmsPresenter {
     if (!this.#filmDetailsPresenter) {
       this.#filmDetailsPresenter = new FilmDetailsPresenter(
         this.#container.parentElement,
+        this.#handleFilmChange,
         this.#removeFilmDetails,
         this.#onEscKeyDown,
-        this.#handleFilmChange
       );
     }
 
@@ -135,8 +140,17 @@ export default class FilmsPresenter {
   }
 
   #addFilmDetails = (film) => {
+    if (this.#selectedFilm && this.#selectedFilm.id === film.id) {
+      return;
+    }
+
+    if (this.#selectedFilm && this.#selectedFilm.id !== film.id) {
+      this.#removeFilmDetails();
+    }
+
     this.#selectedFilm = film
     this.#renderFilmDetails();
+
     document.body.classList.add('hide-overflow');
   };
 
@@ -144,6 +158,7 @@ export default class FilmsPresenter {
     this.#filmDetailsPresenter.destroy();
     this.#filmDetailsPresenter = null;
     this.#selectedFilm = null;
+
     document.body.classList.remove('hide-overflow');
   };
 

@@ -13,11 +13,11 @@ export default class FilmDetailsPresenter  {
   #film = null;
   #comment = null;
 
-  constructor(container, closeButtonClickHandler, escKeyDownHandler, changeData) {
+  constructor(container, changeData, closeButtonClickHandler, escKeyDownHandler) {
     this.#container = container;
+    this.#changeData = changeData;
     this.#closeButtonClickHandler = closeButtonClickHandler;
     this.#escKeyDownHandler = escKeyDownHandler;
-    this.#changeData = changeData;
   }
 
   init = (film, comment) => {
@@ -27,6 +27,7 @@ export default class FilmDetailsPresenter  {
     const prevFilmDetails = this.#filmDetails;
 
     this.#filmDetails = new FilmDetailsView(this.#film, this.#comment);
+
     this.#filmDetails.setFilmDetailsCloseButton(() => {
       this.#closeButtonClickHandler();
       document.removeEventListener('keydown', this.#escKeyDownHandler);
