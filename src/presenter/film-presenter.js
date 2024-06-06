@@ -2,7 +2,7 @@ import {render, replace, remove} from '../framework/render.js';
 import FilmCardView from '../view/film-card-view.js';
 
 export default class FilmPresenter {
-  #filmListContainer = null;
+  #container = null;
 
   #clickCarHandler = null;
   #escKeyDownHandler = null;
@@ -11,11 +11,11 @@ export default class FilmPresenter {
   #filmCard = null;
   #film = null;
 
-  constructor(filmListContainer, clickCardHandler, escKeyDownHandler, changeData) {
-    this.#filmListContainer = filmListContainer;
-    this.#clickCarHandler = clickCardHandler;
-    this.#escKeyDownHandler= escKeyDownHandler;
+  constructor(container,  changeData, clickCardHandler, escKeyDownHandler) {
+    this.#container = container;
     this.#changeData = changeData;
+    this.#clickCarHandler = clickCardHandler;
+    this.#escKeyDownHandler = escKeyDownHandler;
   }
 
   init = (film) => {
@@ -33,7 +33,7 @@ export default class FilmPresenter {
     this.#filmCard.setFavoriteButtonClickHandler(this.#favoriteButtonHandler);
 
     if (prevFilmCard === null) {
-      render(this.#filmCard, this.#filmListContainer.element);
+      render(this.#filmCard, this.#container.element);
       return;
     }
 
