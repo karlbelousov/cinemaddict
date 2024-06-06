@@ -91,7 +91,6 @@ export default class FilmsPresenter {
     };
 
     this.#currentSortType = sortType;
-    console.log(this.#films);
   }
 
   #handleSortTypeChange = (sortType) => {
@@ -162,7 +161,11 @@ export default class FilmsPresenter {
   }
 
   #handleShowMoreButtonClick = () => {
-    this.#renderFilms(this.#renderedFilmsCount, this.#renderedFilmsCount + FILMS_COUNT_PER_STEP);
+    this.#renderFilms(
+      this.#renderedFilmsCount,
+      this.#renderedFilmsCount + FILMS_COUNT_PER_STEP,
+      this.#filmsListContainer
+    );
 
     this.#renderedFilmsCount += FILMS_COUNT_PER_STEP;
 
