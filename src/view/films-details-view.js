@@ -1,10 +1,10 @@
-import AbstractView from '../framework/view/abstract-view.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import {createFilmDetailsInfoTemplate} from './films-details-info-template.js';
 import {createFilmDetailsCommentsTemplate} from './films-details-comments-template.js';
 import {createFilmDetailsFormTemplate} from './films-details-form-template.js';
 import { createFilmDetailsControlsTemplate } from './film-details-controls-template.js';
 
-const createFilmDetailsTemplate = ({filmInfo, userDetails}, comments) => (
+const createFilmDetailsTemplate = ({filmInfo, userDetails, comments, checkedEmotion, comment}) => (
   `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
     <div class="film-details__top-container">
@@ -21,7 +21,7 @@ const createFilmDetailsTemplate = ({filmInfo, userDetails}, comments) => (
 
         ${createFilmDetailsCommentsTemplate(comments)}
 
-        ${createFilmDetailsFormTemplate()}
+        ${createFilmDetailsFormTemplate(checkedEmotion, comment)}
 
       </section>
     </div>
@@ -30,18 +30,80 @@ const createFilmDetailsTemplate = ({filmInfo, userDetails}, comments) => (
 `
 );
 
-export default class FilmDetailsView extends AbstractView {
-  #film = null;
-  #comments = null;
-
-  constructor(film, comments) {
+export default class FilmDetailsView extends AbstractStatefulView {
+  constructor(film, comments, viewData, updateViewData) {
     super();
-    this.#film = film;
-    this.#comments = comments;
+    this._state = this.convertFilmToState(
+      film,
+      comments,
+      viewData.emotion,
+      viewData.comment,
+      viewData.scrollPosition
+    );
+    this.updateViewData = updateViewData;
+    this.#setInnnerHandlers();
   }
 
   get template() {
-    return createFilmDetailsTemplate(this.#film, this.#comments);
+    console.log(this._state);
+    return createFilmDetailsTemplate(this._state);
+  }
+
+  convertFilmToState = (film,
+    comments,
+    checkedEmotion = null,
+    comment = null,
+    scrollPosition = 0) => ({
+    ...film,
+    comments,
+    checkedEmotion,
+    comment,
+    scrollPosition
+  })
+
+  _restoreHandlers = () => {
+    this.setScrollPosition();
+    this.#setInnnerHandlers();
+    this.setFilmDetailsCloseButton(this._callback.closeButtonclick);
+    this.setWatchedButtonClickHandler(this._callback.watchlistButtonClick);
+    this.setWatchedButtonClickHandler(this._callback.watchedButtonClick);
+    this.setFavoriteButtonClickHandler(this._callback.favoriteButtonClick)
+  }
+
+  setScrollPosition = () => {
+    this.element.scrollTop = this._state.scrollPosition;
+  }
+
+  #setInnnerHandlers = () => {
+     this.element
+       .querySelectorAll('.film-details__emoji-label')
+       .forEach((element) => {
+          element.addEventListener('click', this.#emotionClickHandler)
+     })
+     this.element
+       .querySelector('.film-details__comment-input')
+       .addEventListener('input', this.#commentInputHandler)
+  }
+
+  #emotionClickHandler = (evt) => {
+    evt.preventDefault();
+    this.updateElement({
+      checkedEmotion: evt.currentTarget.dataset.emotionType,
+      scrollPosition: this.element.scrollTop
+    })
+  }
+
+  #commentInputHandler = (evt) => {
+    evt.preventDefault();
+    this._setState({comment: evt.target.value});
+  }
+
+  #updateViewData = () => {
+    this.updateViewData({
+      emotion: this._state.checkedEmotion,
+      comment: this._state.comment,
+      scrollPosition: this.element.scrollTop
+    })
   }
 
   setFilmDetailsCloseButton = (callback) => {
@@ -64,19 +126,26 @@ export default class FilmDetailsView extends AbstractView {
     this.element.querySelector('.film-details__control-button--favorite').addEventListener('click', this.#favoriteClickHandler)
   }
 
-  #closeButtonHandler = () => {
+  #closeButtonHandler = (evt) => {
+    evt.preventDefault();
     this._callback.closeButtonclick();
   }
 
-  #watchlistClickHandler = () => {
+  #watchlistClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#updateViewData();
     this._callback.watchlistButtonClick();
   }
 
-  #watchedClickHandler = () => {
+  #watchedClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#updateViewData();
     this._callback.watchedButtonClick();
   }
 
-  #favoriteClickHandler = () => {
+  #favoriteClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#updateViewData();
     this._callback.favoriteButtonClick();
   }
 }

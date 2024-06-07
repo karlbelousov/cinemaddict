@@ -187,6 +187,8 @@ export default class FilmsPresenter {
       );
     }
 
+    console.log(this.#filmDetailsPresenter);
+
     this.#filmDetailsPresenter.init(this.#selectedFilm, comments);
   }
 
