@@ -1,4 +1,4 @@
-import {formatStringToDate, formatMinutesToTime} from '../utils.js';
+import {formatStringToDate, formatMinutesToTime} from '../utils/film.js';
 
 const generateNameList = (names) =>
   (names.length < 1)
@@ -15,7 +15,7 @@ const generateGenreList = (genres) =>
     `<span class="film-details__genre">${genreItem}</span>`
   ).join('');
 
-const createFilmDetailsInfoTemplate = (filmInfo) => {
+export const createFilmDetailsInfoTemplate = (filmInfo) => {
   const {
     title, alternativeTitle, totalRating, poster, ageRating, director,
     writers, actors, release, runtime, genre, description
@@ -81,4 +81,3 @@ const createFilmDetailsInfoTemplate = (filmInfo) => {
     `;
 };
 
-export default createFilmDetailsInfoTemplate;

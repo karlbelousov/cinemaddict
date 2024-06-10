@@ -1,36 +1,66 @@
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import { createFilmsCardInfoTemplate } from './film-card-info-template.js';
 import { createFilmCardControlsTemplate } from './film-card-controls-template.js';
 
-const createFilmCardTemplate = ({filmInfo, comments}) =>
+  `
+  `
+  const createFilmCardTemplate = ({filmInfo, comments, userDetails}) =>
   `
     <article class="film-card">
 
        ${createFilmsCardInfoTemplate(filmInfo, comments.length)}
 
-       ${createFilmCardControlsTemplate()}
+       ${createFilmCardControlsTemplate(userDetails)}
 
     </article>
   `;
 
-export default class FilmCardView {
+export default class FilmCardView extends AbstractView {
+  #film = null;
+
   constructor(film) {
-    this.film = film;
+    super();
+    this.#film = film;
   }
 
-  getTemplate() {
-    return createFilmCardTemplate(this.film);
+  get template() {
+    return createFilmCardTemplate(this.#film);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
+  setFilmCardClickHandler = (callback) => {
+    this._callback.filmCardClick = callback;
+    this.element.querySelector('a').addEventListener('click', this.#fimCardClickHundler);
   }
 
-  removeElement() {
-    this.element = null;
+  setWatchlistButtonClickHandler = (callback) => {
+    this._callback.watchlistButtonClick = callback;
+    this.element.querySelector('.film-card__controls-item--add-to-watchlist').addEventListener('click', this.#watchlistClickHandler)
+  }
+
+  setWatchedButtonClickHandler = (callback) => {
+    this._callback.watchedButtonClick = callback;
+    this.element.querySelector('.film-card__controls-item--mark-as-watched').addEventListener('click', this.#watchedClickHandler)
+  }
+
+  setFavoriteButtonClickHandler = (callback) => {
+    this._callback.favoriteButtonClick = callback;
+    this.element.querySelector('.film-card__controls-item--favorite').addEventListener('click', this.#favoriteClickHandler)
+  }
+
+  #fimCardClickHundler = (evt) => {
+    evt.preventDefault();
+    this._callback.filmCardClick();
+  }
+
+  #watchlistClickHandler = () => {
+    this._callback.watchlistButtonClick();
+  }
+
+  #watchedClickHandler = () => {
+    this._callback.watchedButtonClick();
+  }
+
+  #favoriteClickHandler = () => {
+    this._callback.favoriteButtonClick();
   }
 }
