@@ -31,6 +31,8 @@ const UserStatusTitle = {
   MOVIE_BUFF: 'Movie Buff',
 };
 
+const DESCRIPTION_MAX = 140;
+
 export {
   FILMS_COUNT_PER_STEP,
    MAX_COMMENTS_ON_FILM,
@@ -39,5 +41,6 @@ export {
    FILTER_TYPE_ALL_NAME,
    FilterType,
    SortType,
-   EMOTION
+   EMOTION,
+   DESCRIPTION_MAX
   };
