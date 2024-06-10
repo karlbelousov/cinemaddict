@@ -65,7 +65,7 @@ export default class FilmDetailsView extends AbstractStatefulView {
     this.setScrollPosition();
     this.#setInnnerHandlers();
     this.setFilmDetailsCloseButton(this._callback.closeButtonclick);
-    this.setWatchedButtonClickHandler(this._callback.watchlistButtonClick);
+    this.setWatchlistButtonClickHandler(this._callback.watchlistButtonClick);
     this.setWatchedButtonClickHandler(this._callback.watchedButtonClick);
     this.setFavoriteButtonClickHandler(this._callback.favoriteButtonClick)
   }
