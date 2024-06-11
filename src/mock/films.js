@@ -45,7 +45,7 @@ const generateFilm = () => ({
 
 const generateFilms = () => {
    // Создаем массив с данными о фильмах
-   const films = Array.from({length: 6}, generateFilm);
+   const films = Array.from({length: 20}, generateFilm);
 
    // Ключ totalCommentsCount нужен нам для того, чтобы у фильмов не повторялись id комментариев, ведь не может быть, чтобы один комментарий относился к нескольким фильмам
   let totalCommentsCount = 0;

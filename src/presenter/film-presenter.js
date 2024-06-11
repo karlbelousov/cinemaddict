@@ -33,7 +33,7 @@ export default class FilmPresenter {
     this.#filmCard.setFavoriteButtonClickHandler(this.#favoriteButtonHandler);
 
     if (prevFilmCard === null) {
-      render(this.#filmCard, this.#container.element);
+      render(this.#filmCard, this.#container);
       return;
     }
 

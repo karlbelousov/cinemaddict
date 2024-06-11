@@ -45,7 +45,6 @@ export default class FilmDetailsView extends AbstractStatefulView {
   }
 
   get template() {
-    console.log(this._state);
     return createFilmDetailsTemplate(this._state);
   }
 

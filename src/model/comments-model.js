@@ -1,11 +1,13 @@
+import Observable from '../framework/observable';
 import { generateComments } from '../mock/comments';
 
-export default class CommentsModel {
+export default class CommentsModel extends Observable {
   #filmsModel = null;
   #allComments = [];
   #comments = [];
 
   constructor(filmsModel) {
+    super();
     this.#filmsModel = filmsModel;
     this.#generateAllComments();
   }
