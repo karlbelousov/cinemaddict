@@ -1,5 +1,6 @@
 import {render, replace, remove} from '../framework/render.js';
 import FilmCardView from '../view/film-card-view.js';
+import { UpdateType, UserAction } from '../const.js';
 
 export default class FilmPresenter {
   #container = null;
@@ -47,32 +48,41 @@ export default class FilmPresenter {
   };
 
   #watchlistButtonHandler = () => {
-    this.#changeData({
-      ...this.#film,
-      userDetails: {
-        ...this.#film.userDetails,
-        watchlist: !this.#film.userDetails.watchlist
-      },
-    })
-  }
+    this.#changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.PATCH,
+      {
+        ...this.#film,
+        userDetails: {
+          ...this.#film.userDetails,
+          watchlist: !this.#film.userDetails.watchlist
+        },
+      });
+  };
 
   #watchedButtonHandler = () => {
-    this.#changeData({
-      ...this.#film,
-      userDetails: {
-        ...this.#film.userDetails,
-        alreadyWatched: !this.#film.userDetails.alreadyWatched
-      },
-    })
-  }
+    this.#changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.PATCH,
+      {
+        ...this.#film,
+        userDetails: {
+          ...this.#film.userDetails,
+          alreadyWatched: !this.#film.userDetails.alreadyWatched
+        },
+      });
+  };
 
   #favoriteButtonHandler = () => {
-    this.#changeData({
-      ...this.#film,
-      userDetails: {
-        ...this.#film.userDetails,
-        favorite: !this.#film.userDetails.favorite
-      },
-    })
-  }
+    this.#changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.PATCH,
+      {
+        ...this.#film,
+        userDetails: {
+          ...this.#film.userDetails,
+          favorite: !this.#film.userDetails.favorite
+        },
+      });
+  };
 }

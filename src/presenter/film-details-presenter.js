@@ -1,5 +1,6 @@
 import {render, replace, remove} from '../framework/render.js';
 import FilmDetailsView from '../view/films-details-view.js';
+import { UpdateType, UserAction } from '../const.js';
 
 export default class FilmDetailsPresenter  {
   #container = null;
@@ -17,7 +18,7 @@ export default class FilmDetailsPresenter  {
     emotion: null,
     comment: null,
     scrollPosition: 0
-  }
+  };
 
   constructor(container, changeData, closeButtonClickHandler, escKeyDownHandler) {
     this.#container = container;
@@ -57,43 +58,52 @@ export default class FilmDetailsPresenter  {
     this.#filmDetails.setScrollPosition();
 
     remove(prevFilmDetails);
-  }
+  };
 
   destroy = () => {
     remove(this.#filmDetails);
-  }
+  };
 
   #updateViewData = (viewData) => {
     this.#viewData = {...viewData};
-  }
+  };
 
   #watchlistButtonHandler = () => {
-    this.#changeData({
-      ...this.#film,
-      userDetails: {
-        ...this.#film.userDetails,
-        watchlist: !this.#film.userDetails.watchlist
-      },
-    })
-  }
+    this.#changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.PATCH,
+      {
+        ...this.#film,
+        userDetails: {
+          ...this.#film.userDetails,
+          watchlist: !this.#film.userDetails.watchlist
+        },
+      });
+  };
 
   #watchedButtonHandler = () => {
-    this.#changeData({
-      ...this.#film,
-      userDetails: {
-        ...this.#film.userDetails,
-        alreadyWatched: !this.#film.userDetails.alreadyWatched
-      },
-    })
-  }
+    this.#changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.PATCH,
+      {
+        ...this.#film,
+        userDetails: {
+          ...this.#film.userDetails,
+          alreadyWatched: !this.#film.userDetails.alreadyWatched
+        },
+      });
+  };
 
   #favoriteButtonHandler = () => {
-    this.#changeData({
-      ...this.#film,
-      userDetails: {
-        ...this.#film.userDetails,
-        favorite: !this.#film.userDetails.favorite
-      },
-    })
-  }
+    this.#changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.PATCH,
+      {
+        ...this.#film,
+        userDetails: {
+          ...this.#film.userDetails,
+          favorite: !this.#film.userDetails.favorite
+        },
+      });
+  };
 }

@@ -7,7 +7,7 @@ const SortType = {
   DEFAULT: 'default',
   DATE: 'date',
   RATING: 'rating'
-}
+};
 
 const FilterType = {
   ALL: 'all',
@@ -16,7 +16,7 @@ const FilterType = {
   FAVORITES: 'favorites',
 };
 
-const EMOTION = ['smile', 'sleeping', 'puke', 'angry']
+const EMOTION = ['smile', 'sleeping', 'puke', 'angry'];
 
 const UserStatusValue = {
   NOVICE: 0,
@@ -33,14 +33,24 @@ const UserStatusTitle = {
 
 const DESCRIPTION_MAX = 140;
 
+const UserAction = {
+  UPDATE_FILM: 'UPDATE_FILM'
+};
+
+const UpdateType = {
+  PATCH: 'PATCH',
+};
+
 export {
   FILMS_COUNT_PER_STEP,
-   MAX_COMMENTS_ON_FILM,
-   UserStatusTitle,
-   UserStatusValue,
-   FILTER_TYPE_ALL_NAME,
-   FilterType,
-   SortType,
-   EMOTION,
-   DESCRIPTION_MAX
-  };
+  MAX_COMMENTS_ON_FILM,
+  UserStatusTitle,
+  UserStatusValue,
+  FILTER_TYPE_ALL_NAME,
+  FilterType,
+  SortType,
+  EMOTION,
+  DESCRIPTION_MAX,
+  UpdateType,
+  UserAction
+};
