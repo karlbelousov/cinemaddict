@@ -17,6 +17,7 @@ export default class FilmsPresenter {
   #filmsList = new FilmsListView();
   #filmsListContainer = new FilmsListContainerView();
   #showMoreButton = new ShowMoreButtonView();
+  #filmListEmpty = new FilmListEmptyView();
 
   #container = null;
   #filmsModel = null;
@@ -52,14 +53,18 @@ export default class FilmsPresenter {
   }
 
   #renderFilmBoard = () => {
-   if (this.films === 0) {
-      render(new FilmListEmptyView(), this.#container);
+   if (this.films.length === 0) {
+      this.#renderNoFilms();
       return;
     }
 
     this.#renderSort(this.#container);
     this.#renderFilmListContainer(this.#container);
     this.#renderFilmList();
+  }
+
+  #renderNoFilms = () => {
+    render(this.#filmListEmpty, this.#container);
   }
 
   #renderFilmListContainer = (container) => {
