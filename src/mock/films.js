@@ -74,7 +74,7 @@ const generateFilms = () => {
         ) : [],
       filmInfo: film,
       userDetails: {
-        watchlis: Boolean(getRandomInteger(0, 1)),
+        watchlist: Boolean(getRandomInteger(0, 1)),
         alreadyWatched,
         watchingDate: (alreadyWatched) ? getWatchingDate() : null,
         favorite: Boolean(getRandomInteger(0, 1))
