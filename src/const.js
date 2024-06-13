@@ -11,8 +11,8 @@ const SortType = {
 
 const FilterType = {
   ALL: 'all',
-  WATCHLIST: 'watchlist',
-  HISTORY: 'history',
+  WATCHLIST: 'wathlist',
+  HISTORY: 'histori',
   FAVORITES: 'favorites',
 };
 
