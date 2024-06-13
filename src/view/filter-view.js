@@ -62,6 +62,5 @@ export default class FilterView extends AbstractView {
 
     evt.preventDefault();
     this._callback.filterTypeChange(evt.target.dataset.filterType);
-    console.log(evt.target.dataset.filterType);
   };
 }
