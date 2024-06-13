@@ -61,7 +61,21 @@ export default class FilmsPresenter {
 
     this.#renderSort(this.#container);
     this.#renderFilmListContainer(this.#container);
-    this.#renderFilmList();
+    const filmsCount = this.films.length;
+    const films = this.films.slice(0, Math.min(filmsCount, this.#renderedFilmsCount));
+    this.#renderFilms(films);
+
+    if (filmsCount > this.#renderedFilmsCount) {
+      this.#renderShowMoreButton(this.#filmsList.element);
+    }
+  };
+
+  #clearFilmBoard = () => {
+    this.#filmPresenter.forEach((presenter) => presenter.destroy());
+    this.#filmPresenter.clear();
+    remove(this.#showMoreButton);
+    remove(this.#filmListEmpty);
+    remove(this.#filmsContainer);
   };
 
   #renderNoFilms = () => {
@@ -99,9 +113,8 @@ export default class FilmsPresenter {
     }
 
     this.#currentSortType = sortType;
-    this.#clearFilmList();
-    this.#renderSort(this.#container);
-    this.#renderFilmList();
+    this.#clearFilmBoard();
+    this.#renderFilmBoard();
   };
 
   #renderSort = (container) => {
@@ -115,23 +128,6 @@ export default class FilmsPresenter {
     }
 
     this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
-  };
-
-  #renderFilmList = () => {
-    const filmsCount = this.films.length;
-    const films = this.films.slice(0, Math.min(filmsCount, this.#renderedFilmsCount));
-    this.#renderFilms(films);
-
-    if (filmsCount > this.#renderedFilmsCount) {
-      this.#renderShowMoreButton(this.#filmsList.element);
-    }
-  };
-
-  #clearFilmList = () => {
-    this.#filmPresenter.forEach((presenter) => presenter.destroy());
-    this.#filmPresenter.clear();
-    remove(this.#showMoreButton);
-    remove(this.#filmListEmpty);
   };
 
   #renderShowMoreButton = (container) => {
