@@ -5,10 +5,12 @@ import FooterStatistics from './view/footer-statistics-view.js';
 import FilmsPresenter from './presenter/films-presenter.js';
 import FilmsModel from './model/fillms-model.js';
 import CommentsModel from './model/comments-model.js';
+import FilterModel from './model/filter-model.js';
 
 import {render} from './framework/render.js';
 import {getUserStatus} from './utils/user.js';
 import {generateFilter} from './mock/fillter.js';
+import FilterModel from './model/filter-model.js';
 
 const bodyElement = document.querySelector('body');
 const siteHeaderElement = bodyElement.querySelector('.header');
@@ -18,6 +20,8 @@ const footerStatistics = siteFooterElement.querySelector('.footer__statistics');
 
 const filmsModel = new FilmsModel();
 const commentsModel = new CommentsModel(filmsModel);
+const filterModel = new FilterModel();
+
 const filmsPresenter = new FilmsPresenter(siteMainElement, filmsModel, commentsModel);
 
 const userStatus = getUserStatus(filmsModel.films);
