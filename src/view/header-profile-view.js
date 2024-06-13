@@ -9,12 +9,13 @@ const createHeaderProfileTemplate = (userStatus) => (
 );
 
 export default class HeaderProfileView extends AbstractView {
-  #userStatus = null
+  #userStatus = null;
 
   constructor(userStatus) {
     super();
     this.#userStatus = userStatus;
   }
+
   get template() {
     return createHeaderProfileTemplate(this.#userStatus);
   }

@@ -16,7 +16,7 @@ export default class FilmsPresenter {
   #filmsContainer = new FilmsView();
   #filmsList = new FilmsListView();
   #filmsListContainer = new FilmsListContainerView();
-  #showMoreButton = new ShowMoreButtonView();
+  #showMoreButton = null;
   #filmListEmpty = new FilmListEmptyView();
 
   #container = null;
@@ -74,17 +74,6 @@ export default class FilmsPresenter {
     render(this.#filmsListContainer, this.#filmsList.element);
   };
 
-  // #handleFilmChange = (updatedFilm) => {
-  //   if (this.#filmPresenter.get(updatedFilm.id)) {
-  //     this.#filmPresenter.get(updatedFilm.id).init(updatedFilm);
-  //   }
-
-  //   if (this.#filmDetailsPresenter && this.#selectedFilm.id === updatedFilm.id) {
-  //     this.#selectedFilm = updatedFilm;
-  //     this.#renderFilmDetails();
-  //   }
-  // };
-
   #handleViewAction = (actionType, updateType, update) => {
     switch (actionType) {
       case UserAction.UPDATE_FILM:
@@ -130,10 +119,10 @@ export default class FilmsPresenter {
 
   #renderFilmList = () => {
     const filmsCount = this.films.length;
-    const films = this.films.slice(0, Math.min(filmsCount, FILMS_COUNT_PER_STEP));
+    const films = this.films.slice(0, Math.min(filmsCount, this.#renderedFilmsCount));
     this.#renderFilms(films);
 
-    if (filmsCount > FILMS_COUNT_PER_STEP) {
+    if (filmsCount > this.#renderedFilmsCount) {
       this.#renderShowMoreButton(this.#filmsList.element);
     }
   };
@@ -141,15 +130,14 @@ export default class FilmsPresenter {
   #clearFilmList = () => {
     this.#filmPresenter.forEach((presenter) => presenter.destroy());
     this.#filmPresenter.clear();
-    this.#renderedFilmsCount = FILMS_COUNT_PER_STEP;
     remove(this.#showMoreButton);
+    remove(this.#filmListEmpty);
   };
 
   #renderShowMoreButton = (container) => {
+    this.#showMoreButton = new ShowMoreButtonView();
+    this.#showMoreButton.setButtonClickHandler(this.#handleShowMoreButtonClick);
     render(this.#showMoreButton, container);
-    this.#showMoreButton.setButtonClickHandler(() =>
-      this.#handleShowMoreButtonClick()
-    );
   };
 
   #renderFilms = (films) => {
@@ -181,7 +169,7 @@ export default class FilmsPresenter {
   };
 
   #renderFilmDetails = () => {
-    const comments = [...this.#commentsModel.get(this.#selectedFilm)];
+    const comments = this.#commentsModel.get(this.#selectedFilm);
 
     if (!this.#filmDetailsPresenter) {
       this.#filmDetailsPresenter = new FilmDetailsPresenter(

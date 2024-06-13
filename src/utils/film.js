@@ -1,11 +1,10 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-import relativeTime from 'dayjs/plugin/relativeTime';
 
 dayjs.extend(duration);
 
 const formatStringToDateWithTime = (date) =>
-  dayjs(date).format('YYYY/MM/DD/HH:mm')
+  dayjs(date).format('YYYY/MM/DD/HH:mm');
 
 const formatStringToDate = (date) =>
   dayjs(date).format('DD MMMM YYYY');
