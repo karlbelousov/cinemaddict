@@ -68,7 +68,7 @@ export default class FilterPresenter {
   };
 
   #handleFilterTypeChange = (filterType) => {
-    if (this.#filmsModel.filter === filterType) {
+    if (this.#filterModel.filter === filterType) {
       return;
     }
 

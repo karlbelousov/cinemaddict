@@ -44,10 +44,10 @@ const generateFilm = () => ({
 });
 
 const generateFilms = () => {
-   // Создаем массив с данными о фильмах
-   const films = Array.from({length: 20}, generateFilm);
+  // Создаем массив с данными о фильмах
+  const films = Array.from({length: 20}, generateFilm);
 
-   // Ключ totalCommentsCount нужен нам для того, чтобы у фильмов не повторялись id комментариев, ведь не может быть, чтобы один комментарий относился к нескольким фильмам
+  // Ключ totalCommentsCount нужен нам для того, чтобы у фильмов не повторялись id комментариев, ведь не может быть, чтобы один комментарий относился к нескольким фильмам
   let totalCommentsCount = 0;
 
   const getWatchingDate = () => getDate(DateType.USER_DETAILS);
@@ -75,7 +75,7 @@ const generateFilms = () => {
       filmInfo: film,
       userDetails: {
         watchlist: Boolean(getRandomInteger(0, 1)),
-        alreadyWatched,
+        alreadyWatched: alreadyWatched,
         watchingDate: (alreadyWatched) ? getWatchingDate() : null,
         favorite: Boolean(getRandomInteger(0, 1))
       }

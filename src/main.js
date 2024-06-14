@@ -17,7 +17,7 @@ const filmsModel = new FilmsModel();
 const commentsModel = new CommentsModel(filmsModel);
 const filterModel = new FilterModel();
 
-const filmsPresenter = new FilmsPresenter(siteMainElement, filmsModel, commentsModel);
+const filmsPresenter = new FilmsPresenter(siteMainElement, filmsModel, commentsModel, filterModel);
 const filterPresenter = new FilterPresenter(siteMainElement, filmsModel, filterModel);
 
 const userStatus = getUserStatus(filmsModel.films);

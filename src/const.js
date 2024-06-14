@@ -12,7 +12,7 @@ const SortType = {
 const FilterType = {
   ALL: 'all',
   WATCHLIST: 'wathlist',
-  HISTORY: 'histori',
+  HISTORY: 'history',
   FAVORITES: 'favorites',
 };
 
@@ -39,6 +39,7 @@ const UserAction = {
 
 const UpdateType = {
   PATCH: 'PATCH',
+  MAJOR: 'MAJOR',
 };
 
 export {

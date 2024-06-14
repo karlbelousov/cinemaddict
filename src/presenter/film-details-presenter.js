@@ -71,7 +71,7 @@ export default class FilmDetailsPresenter  {
   #watchlistButtonHandler = () => {
     this.#changeData(
       UserAction.UPDATE_FILM,
-      UpdateType.PATCH,
+      UpdateType.MAJOR,
       {
         ...this.#film,
         userDetails: {
@@ -84,7 +84,7 @@ export default class FilmDetailsPresenter  {
   #watchedButtonHandler = () => {
     this.#changeData(
       UserAction.UPDATE_FILM,
-      UpdateType.PATCH,
+      UpdateType.MAJOR,
       {
         ...this.#film,
         userDetails: {
@@ -97,7 +97,7 @@ export default class FilmDetailsPresenter  {
   #favoriteButtonHandler = () => {
     this.#changeData(
       UserAction.UPDATE_FILM,
-      UpdateType.PATCH,
+      UpdateType.MAJOR,
       {
         ...this.#film,
         userDetails: {
