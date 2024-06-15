@@ -34,7 +34,9 @@ const UserStatusTitle = {
 const DESCRIPTION_MAX = 140;
 
 const UserAction = {
-  UPDATE_FILM: 'UPDATE_FILM'
+  UPDATE_FILM: 'UPDATE_FILM',
+  DELETE_COMMENT: 'DELETE_COMMENT',
+  ADD_COMMENT: 'ADD_COMMENT',
 };
 
 const UpdateType = {

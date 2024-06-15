@@ -12,7 +12,7 @@ export default class FilmDetailsPresenter  {
   #filmDetails = null;
 
   #film = null;
-  #comment = null;
+  #comments = null;
 
   #viewData = {
     emotion: null,
@@ -27,15 +27,15 @@ export default class FilmDetailsPresenter  {
     this.#escKeyDownHandler = escKeyDownHandler;
   }
 
-  init = (film, comment) => {
+  init = (film, comments) => {
     this.#film = film;
-    this.#comment = comment;
+    this.#comments = comments;
 
     const prevFilmDetails = this.#filmDetails;
 
     this.#filmDetails = new FilmDetailsView(
       this.#film,
-      this.#comment,
+      this.#comments,
       this.#viewData,
       this.#updateViewData
     );
@@ -47,6 +47,7 @@ export default class FilmDetailsPresenter  {
     this.#filmDetails.setWatchlistButtonClickHandler(this.#watchlistButtonHandler);
     this.#filmDetails.setWatchedButtonClickHandler(this.#watchedButtonHandler);
     this.#filmDetails.setFavoriteButtonClickHandler(this.#favoriteButtonHandler);
+    this.#filmDetails.setCommentDeleteClickHandler(this.#commentDeleteClickHandler);
 
     if (prevFilmDetails === null) {
       render(this.#filmDetails, this.#container);
@@ -105,5 +106,24 @@ export default class FilmDetailsPresenter  {
           favorite: !this.#film.userDetails.favorite
         },
       });
+  };
+
+  #commentDeleteClickHandler = (commentId) => {
+    const filmCommentIdIndex = this.#film.comments.findIndex((filmCommentId) => filmCommentId === commentId);
+
+    const deletedComment = this.#comments.find((comment) => comment.id === commentId);
+
+    this.#changeData(
+      UserAction.DELETE_COMMENT,
+      UpdateType.PATCH,
+      {
+        ...this.#film,
+        comments: [
+          ...this.#film.comments.slice(0, filmCommentIdIndex),
+          ...this.#film.comments.slice(filmCommentIdIndex + 1)
+        ]
+      },
+      deletedComment
+    );
   };
 }

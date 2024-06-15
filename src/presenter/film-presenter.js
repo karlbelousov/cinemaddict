@@ -5,7 +5,7 @@ import { UpdateType, UserAction } from '../const.js';
 export default class FilmPresenter {
   #container = null;
 
-  #clickCarHandler = null;
+  #clickCardHandler = null;
   #escKeyDownHandler = null;
   #changeData = null;
 
@@ -15,7 +15,7 @@ export default class FilmPresenter {
   constructor(container,  changeData, clickCardHandler, escKeyDownHandler) {
     this.#container = container;
     this.#changeData = changeData;
-    this.#clickCarHandler = clickCardHandler;
+    this.#clickCardHandler = clickCardHandler;
     this.#escKeyDownHandler = escKeyDownHandler;
   }
 
@@ -26,7 +26,7 @@ export default class FilmPresenter {
 
     this.#filmCard = new FilmCardView(this.#film);
     this.#filmCard.setFilmCardClickHandler(() => {
-      this.#clickCarHandler(this.#film);
+      this.#clickCardHandler(this.#film);
       document.addEventListener('keydown', this.#escKeyDownHandler);
     });
     this.#filmCard.setWatchlistButtonClickHandler(this.#watchlistButtonHandler);
