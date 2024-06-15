@@ -9,7 +9,7 @@ const createFilterItemTemplate = ({type, name, count}, currentFilterType) => {
 
   const getFilterTextContent = (filterName) =>
     (filterName !== FilterType.ALL)
-      ? `<span class="main-navigation__item-count">${count}</span>`
+      ? `<span class="main-navigation__item-count" data-filter-type="${name.toLowerCase()}">${count}</span>`
       : '';
 
   return `
@@ -56,10 +56,6 @@ export default class FilterView extends AbstractView {
   };
 
   #filterTypeChangeHandler = (evt) => {
-    if (evt.target.tagName !== 'A') {
-      return;
-    }
-
     evt.preventDefault();
     this._callback.filterTypeChange(evt.target.dataset.filterType);
   };
