@@ -12,9 +12,14 @@ const siteHeaderElement = bodyElement.querySelector('.header');
 const siteMainElement = bodyElement.querySelector('.main');
 const siteFooterElement = bodyElement.querySelector('.footer');
 const footerStatistics = siteFooterElement.querySelector('.footer__statistics');
+import FilmApiServices from './api-services/films-api-services.js';
+import CommentsApiServices from './api-services/comments-api-services.js';
 
-const filmsModel = new FilmsModel();
-const commentsModel = new CommentsModel(filmsModel);
+const AUTHORIZATION = 'Basic veiyvugvwuggvwugvw';
+const END_POINT = 'https://17.ecmascript.htmlacademy.pro/cinemaddict';
+
+const filmsModel = new FilmsModel(new FilmApiServices(END_POINT, AUTHORIZATION));
+const commentsModel = new CommentsModel(new CommentsApiServices(END_POINT, AUTHORIZATION));
 const filterModel = new FilterModel();
 
 const filmsPresenter = new FilmsPresenter(siteMainElement, filmsModel, commentsModel, filterModel);
