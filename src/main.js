@@ -33,3 +33,4 @@ render(new FooterStatistics(filmCount), footerStatistics);
 
 filterPresenter.init();
 filmsPresenter.init();
+filmsModel.init();
