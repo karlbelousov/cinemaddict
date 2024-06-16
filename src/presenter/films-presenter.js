@@ -4,6 +4,7 @@ import FilmsListView from '../view/films-list-view.js';
 import FilmsListContainerView from '../view/films-list-container-view.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
 import FilmListEmptyView from '../view/film-list-empty-view.js';
+import LoadingView from '../view/loading-view.js';
 import FilmPresenter from './film-presenter.js';
 import FilmDetailsPresenter from './film-details-presenter.js';
 import {render, remove} from '../framework/render.js';
@@ -16,6 +17,7 @@ export default class FilmsPresenter {
   #filmsContainer = new FilmsView();
   #filmsList = new FilmsListView();
   #filmsListContainer = new FilmsListContainerView();
+  #loadingComponent = new LoadingView();
   #showMoreButton = null;
   #filmListEmpty = null;
 
@@ -30,6 +32,7 @@ export default class FilmsPresenter {
 
   #filmPresenter = new Map();
   #filmDetailsPresenter = null;
+  #isLoading = true;
 
   #renderedFilmsCount = FILMS_COUNT_PER_STEP;
 
@@ -62,6 +65,11 @@ export default class FilmsPresenter {
   }
 
   #renderFilmBoard = () => {
+    if (this.#isLoading) {
+      this.#renderLoading(this.#container);
+      return;
+    }
+
     const films = this.films;
     const filmCount = films.length;
 
@@ -107,6 +115,10 @@ export default class FilmsPresenter {
     render(this.#filmListEmpty, this.#container);
   };
 
+  #renderLoading = (container) => {
+    render(this.#loadingComponent, container);
+  };
+
   #renderFilmListContainer = (container) => {
     render(this.#filmsContainer, container);
     render(this.#filmsList, this.#filmsContainer.element);
@@ -146,6 +158,10 @@ export default class FilmsPresenter {
           this.#renderFilmDetails();
         }
         break;
+      case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.#renderFilmBoard();
     }
   };
 
@@ -199,8 +215,10 @@ export default class FilmsPresenter {
     }
   };
 
-  #renderFilmDetails = () => {
-    const comments = this.#commentsModel.get(this.#selectedFilm);
+  #renderFilmDetails = async () => {
+    const comments = await this.#commentsModel.get(this.#selectedFilm);
+
+    const isCommentLoadingError = !comments;
 
     if (!this.#filmDetailsPresenter) {
       this.#filmDetailsPresenter = new FilmDetailsPresenter(
@@ -210,7 +228,10 @@ export default class FilmsPresenter {
         this.#onEscKeyDown,
       );
     }
-    document.addEventListener('keydown', this.#onCtrlEnterDown);
+
+    if (isCommentLoadingError) {
+      document.addEventListener('keydown', this.#onCtrlEnterDown);
+    }
 
     this.#filmDetailsPresenter.init(this.#selectedFilm, comments);
   };

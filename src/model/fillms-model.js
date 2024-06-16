@@ -1,3 +1,4 @@
+import { UpdateType } from '../const.js';
 import Observable from '../framework/observable.js';
 
 export default class FilmsModel extends Observable {
@@ -16,6 +17,7 @@ export default class FilmsModel extends Observable {
     } catch {
       this.#films = [];
     }
+    this._notify(UpdateType.INIT);
   };
 
   get films() {
@@ -45,12 +47,12 @@ export default class FilmsModel extends Observable {
         ...film['film_info'],
         ageRating: film['film_info']['age_rating'],
         totalRating: film['film_info']['total_rating'],
-        alternativeTitle: film['film_info']['alternative_title'],
-        userDetails: {
-          ...film['user_details'],
-          alreadyWatched: film['user_details']['already_watched'],
-          watchingDate: film['user_details']['watching_date']
-        }
+        alternativeTitle: film['film_info']['alternative_title']
+      },
+      userDetails: {
+        ...film['user_details'],
+        alreadyWatched: film['user_details']['already_watched'],
+        watchingDate: film['user_details']['watching_date']
       }
     };
 
