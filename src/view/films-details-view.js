@@ -144,6 +144,10 @@ export default class FilmDetailsView extends AbstractStatefulView {
     }
   };
 
+  setCommentData = () => {
+    this.#updateViewData();
+  };
+
   #closeButtonHandler = (evt) => {
     evt.preventDefault();
     this._callback.closeButtonclick();

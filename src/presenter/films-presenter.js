@@ -122,6 +122,10 @@ export default class FilmsPresenter {
         this.#commentsModel.deleteComment(updateType, updateComment);
         this.#filmsModel.updateFilm(updateType, updateFilm);
         break;
+      case UserAction.ADD_COMMENT:
+        this.#commentsModel.addComment(UpdateType, updateComment);
+        this.#filmDetailsPresenter.clearViewData();
+        this.#filmsModel.updateFilm(updateType, updateFilm);
     }
   };
 
@@ -206,6 +210,7 @@ export default class FilmsPresenter {
         this.#onEscKeyDown,
       );
     }
+    document.addEventListener('keydown', this.#onCtrlEnterDown);
 
     this.#filmDetailsPresenter.init(this.#selectedFilm, comments);
   };
@@ -226,6 +231,7 @@ export default class FilmsPresenter {
   };
 
   #removeFilmDetails = () => {
+    document.removeEventListener('keydown', this.#onCtrlEnterDown);
     this.#filmDetailsPresenter.destroy();
     this.#filmDetailsPresenter = null;
     this.#selectedFilm = null;
@@ -238,6 +244,13 @@ export default class FilmsPresenter {
       evt.preventDefault();
       this.#removeFilmDetails();
       document.removeEventListener('keydown', this.#onEscKeyDown);
+    }
+  };
+
+  #onCtrlEnterDown = (evt) => {
+    if (evt.key === 'Enter' && (evt.metaKey || evt.ctrlKey)) {
+      evt.preventDefault();
+      this.#filmDetailsPresenter.createComment();
     }
   };
 }

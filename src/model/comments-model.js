@@ -25,6 +25,11 @@ export default class CommentsModel extends Observable {
     return this.#comments;
   }
 
+  addComment = (updateType, update) => {
+    this.#allComments.push(update);
+    this._notify(updateType, update);
+  };
+
   deleteComment = (updateType, update) => {
     const index = this.#allComments.findIndex((comment) => comment.id === update.id);
 
