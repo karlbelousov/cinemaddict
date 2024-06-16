@@ -1,7 +1,14 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 dayjs.extend(duration);
+dayjs.extend(relativeTime);
+
+const humanizeDate = (date) => {
+  const timeDiff = dayjs(date).diff(dayjs());
+  return dayjs.duration(timeDiff).humanize(true);
+};
 
 const formatStringToDateWithTime = (date) =>
   dayjs(date).format('YYYY/MM/DD/HH:mm');
@@ -27,5 +34,6 @@ export {
   formatStringToYear,
   formatMinutesToTime,
   sortFilmsByDate,
-  sortFilmsByRating
+  sortFilmsByRating,
+  humanizeDate
 };
