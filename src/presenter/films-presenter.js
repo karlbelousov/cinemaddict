@@ -128,16 +128,16 @@ export default class FilmsPresenter {
   #handleViewAction = (actionType, updateType, updateFilm, updateComment) => {
     switch (actionType) {
       case UserAction.UPDATE_FILM:
-        this.#filmsModel.updateFilm(updateType, updateFilm);
+        this.#filmsModel.update(updateType, updateFilm);
         break;
       case UserAction.DELETE_COMMENT:
         this.#commentsModel.deleteComment(updateType, updateComment);
-        this.#filmsModel.updateFilm(updateType, updateFilm);
+        this.#filmsModel.update(updateType, updateFilm);
         break;
       case UserAction.ADD_COMMENT:
         this.#commentsModel.addComment(UpdateType, updateComment);
         this.#filmDetailsPresenter.clearViewData();
-        this.#filmsModel.updateFilm(updateType, updateFilm);
+        this.#filmsModel.update(updateType, updateFilm);
     }
   };
 

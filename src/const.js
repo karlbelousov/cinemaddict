@@ -45,6 +45,12 @@ const UpdateType = {
   INIT: 'INIT',
 };
 
+const Method = {
+  GET: 'GET',
+  PUT: 'PUT',
+  DELETE: 'DELETE',
+};
+
 export {
   FILMS_COUNT_PER_STEP,
   MAX_COMMENTS_ON_FILM,
@@ -56,5 +62,6 @@ export {
   EMOTION,
   DESCRIPTION_MAX,
   UpdateType,
-  UserAction
+  UserAction,
+  Method
 };
