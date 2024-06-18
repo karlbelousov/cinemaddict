@@ -183,7 +183,7 @@ export default class FilmsPresenter {
     this.#filmPresenter.clear();
 
     remove(this.#showMoreButton);
-    remove(this.#sortComponent);
+    remove(this.#filmListEmpty);
 
     if (resetRenderedFilmsCount) {
       this.#renderedFilmsCount = FILMS_COUNT_PER_STEP;
