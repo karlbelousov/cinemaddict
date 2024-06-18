@@ -25,6 +25,7 @@ export default class FilmPresenter {
     const prevFilmCard = this.#filmCard;
 
     this.#filmCard = new FilmCardView(this.#film);
+
     this.#filmCard.setFilmCardClickHandler(() => {
       this.#clickCardHandler(this.#film);
       document.addEventListener('keydown', this.#escKeyDownHandler);
@@ -34,7 +35,7 @@ export default class FilmPresenter {
     this.#filmCard.setFavoriteButtonClickHandler(this.#favoriteButtonHandler);
 
     if (prevFilmCard === null) {
-      render(this.#filmCard, this.#container);
+      render(this.#filmCard, this.#container.element);
       return;
     }
 

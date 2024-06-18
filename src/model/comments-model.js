@@ -14,12 +14,12 @@ export default class CommentsModel extends Observable {
     return this.#comments;
   };
 
-  addComment = (updateType, update) => {
+  add = (updateType, update) => {
     this.#comments.push(update);
     this._notify(updateType, update);
   };
 
-  deleteComment = (updateType, update) => {
+  delete = (updateType, update) => {
     const index = this.#comments.findIndex((comment) => comment.id === update.id);
 
     if  (index === -1) {
