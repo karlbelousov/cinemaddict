@@ -63,7 +63,7 @@ export const createFilmDetailsInfoTemplate = (filmInfo) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>
-              <td class="film-details__cell">${release.releaseСountry}</td>
+              <td class="film-details__cell">${release.releaseCountry}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">${generateGenreTitle(genre)}</td>
