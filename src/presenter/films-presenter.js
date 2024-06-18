@@ -228,7 +228,7 @@ export default class FilmsPresenter {
       this.#filmListContainer
     );
 
-    if (films.length > FILMS_COUNT_PER_STEP) {
+    if (this.films.length > FILMS_COUNT_PER_STEP) {
       this.#renderShowMoreButton(this.#filmList.element);
     }
   }
