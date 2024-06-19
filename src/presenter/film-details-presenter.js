@@ -1,7 +1,6 @@
 import {render, replace, remove} from '../framework/render.js';
 import FilmDetailsView from '../view/films-details-view.js';
 import { UpdateType, UserAction } from '../const.js';
-import { nanoid } from 'nanoid';
 
 export default class FilmDetailsPresenter  {
   #container = null;
@@ -28,9 +27,9 @@ export default class FilmDetailsPresenter  {
     this.#escKeyDownHandler = escKeyDownHandler;
   }
 
-  init = (film, comments) => {
+  init = (film, comments, isCommentLoadingError) => {
     this.#film = film;
-    this.#comments = comments;
+    this.#comments = (!isCommentLoadingError) ? comments : [];
 
     const prevFilmDetails = this.#filmDetails;
 
@@ -38,7 +37,8 @@ export default class FilmDetailsPresenter  {
       this.#film,
       this.#comments,
       this.#viewData,
-      this.#updateViewData
+      this.#updateViewData,
+      isCommentLoadingError
     );
 
     this.#filmDetails.setFilmDetailsCloseButton(() => {
@@ -72,6 +72,12 @@ export default class FilmDetailsPresenter  {
       emotion: null,
       scrollPosition: this.#viewData.scrollPosition
     });
+
+    this.#filmDetails.updateElement({
+      checkedEmotion: this.#viewData.emotion,
+      comment: this.#viewData.comment,
+      scrollPosition: this.#viewData.scrollPosition
+    });
   };
 
   createComment = () => {
@@ -80,27 +86,11 @@ export default class FilmDetailsPresenter  {
     const {emotion, comment} = this.#viewData;
 
     if (emotion && comment) {
-      const newCommentId  = nanoid();
-
-      const createdComment = {
-        id: newCommentId,
-        author: 'Olof',
-        date: new Date(),
-        emotion,
-        comment
-      };
-
       this.#changeData(
         UserAction.ADD_COMMENT,
         UpdateType.PATCH,
-        {
-          ...this.#film,
-          comments: [
-            ...this.#film.comments,
-            newCommentId,
-          ]
-        },
-        createdComment
+        this.#film,
+        {emotion, comment}
       );
     }
   };
@@ -149,20 +139,12 @@ export default class FilmDetailsPresenter  {
   };
 
   #commentDeleteClickHandler = (commentId) => {
-    const filmCommentIdIndex = this.#film.comments.findIndex((filmCommentId) => filmCommentId === commentId);
-
     const deletedComment = this.#comments.find((comment) => comment.id === commentId);
 
     this.#changeData(
       UserAction.DELETE_COMMENT,
       UpdateType.PATCH,
-      {
-        ...this.#film,
-        comments: [
-          ...this.#film.comments.slice(0, filmCommentIdIndex),
-          ...this.#film.comments.slice(filmCommentIdIndex + 1)
-        ]
-      },
+      this.#film,
       deletedComment
     );
   };

@@ -17,7 +17,7 @@ const AUTHORIZATION = 'Basic veiyvugvwuggvwugvw';
 const END_POINT = 'https://17.ecmascript.htmlacademy.pro/cinemaddict';
 
 const filmsModel = new FilmsModel(new FilmApiServices(END_POINT, AUTHORIZATION));
-const commentsModel = new CommentsModel(new CommentsApiServices(END_POINT, AUTHORIZATION));
+const commentsModel = new CommentsModel(new CommentsApiServices(END_POINT, AUTHORIZATION), filmsModel);
 const filterModel = new FilterModel();
 
 const headerProfilePresenter = new HeaderProfilePresenter(siteHeaderElement, filmsModel);
