@@ -102,6 +102,27 @@ export default class FilmDetailsPresenter  {
     });
   };
 
+  setAborting = ({actionType, commentId}) => {
+    this.#filmDetails.updateElement({
+      ...this.#viewData,
+      isDisabled: false,
+      deleteCommentId: null,
+      isFilmUpdated: false
+    });
+
+    switch (actionType) {
+      case UserAction.UPDATE_FILM:
+        this.#filmDetails.shakeControls();
+        break;
+      case UserAction.ADD_COMMENT:
+        this.#filmDetails.shakeForm();
+        break;
+      case UserAction.DELETE_COMMENT:
+        this.#filmDetails.shakeComment(commentId);
+        break;
+    }
+  };
+
   createComment = () => {
     this.#filmDetails.setCommentData();
 

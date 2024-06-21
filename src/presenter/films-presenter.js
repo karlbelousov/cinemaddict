@@ -68,7 +68,7 @@ export default class FilmsPresenter {
     this.#renderFilmBoard();
   };
 
-  #handleViewAction = (actionType, updateType, updateFilm, updateComment) => {
+  #handleViewAction = async(actionType, updateType, updateFilm, updateComment) => {
     switch (actionType) {
       case UserAction.UPDATE_FILM:
         if (this.#filmPresenter.get(updateFilm.id) && !this.#filmDetailsPresenter) {
@@ -79,16 +79,36 @@ export default class FilmsPresenter {
           this.#filmDetailsPresenter.setFilmUpdated();
         }
 
-        this.#filmsModel.updateOnServer(updateType, updateFilm);
+        try {
+          await this.#filmsModel.updateOnServer(updateType, updateFilm);
+        } catch (error) {
+          if (this.#filmPresenter.get(updateFilm.id) && !this.#filmDetailsPresenter) {
+            this.#filmPresenter.get(updateFilm.id).setAborting();
+          }
+
+          if (this.#filmDetailsPresenter) {
+            this.#filmDetailsPresenter.setAborting({actionType});
+          }
+        }
         break;
+
       case UserAction.DELETE_COMMENT:
         this.#filmDetailsPresenter.setCommentDeleting(updateComment.id);
-        this.#commentsModel.delete(updateType, updateFilm, updateComment);
+        try {
+          await this.#commentsModel.delete(updateType, updateFilm, updateComment);
+        } catch (error) {
+          this.#filmDetailsPresenter.setAborting({actionType, commentId: updateComment.id});
+        }
         break;
       case UserAction.ADD_COMMENT:
         this.#filmDetailsPresenter.setCommentCreating();
-        this.#commentsModel.add(updateType, updateFilm, updateComment);
-        this.#filmDetailsPresenter.clearViewData();
+        try {
+          await  this.#commentsModel.add(updateType, updateFilm, updateComment);
+          this.#filmDetailsPresenter.clearViewData();
+        } catch (error) {
+          this.#filmDetailsPresenter.setAborting({actionType});
+        }
+        break;
     }
   };
 

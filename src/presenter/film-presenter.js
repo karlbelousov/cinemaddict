@@ -54,6 +54,14 @@ export default class FilmPresenter {
     });
   };
 
+  setAborting = () => {
+    this.#filmCard.updateElement({
+      isDisabled: false
+    });
+
+    this.#filmCard.shakeControls();
+  };
+
   #watchlistButtonHandler = () => {
     this.#changeData(
       UserAction.UPDATE_FILM,

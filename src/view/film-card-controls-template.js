@@ -1,6 +1,6 @@
 export const createFilmCardControlsTemplate = ({watchlist,  alreadyWatched, favorite}, isDisabled) => (
   `
-    <div class="film-card__controls">
+    <div class="film-card__controls"  style="position: absolute">
       <button
         class="
           film-card__controls-item

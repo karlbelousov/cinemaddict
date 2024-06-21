@@ -92,6 +92,21 @@ export default class FilmDetailsView extends AbstractStatefulView {
     this.element.scrollTop = this._state.scrollPosition;
   };
 
+  shakeControls = () => {
+    const controlsElement = this.element.querySelector('.film-details__controls');
+    this.shake.call({element: controlsElement});
+  };
+
+  shakeForm = () => {
+    const formElement = this.element.querySelector('.film-details__new-comment');
+    this.shake.call({element: formElement});
+  };
+
+  shakeComment = (commentId) => {
+    const commentElement = this.element.querySelector(`li[data-comment-id='${commentId}']`);
+    this.shake.call({element: commentElement});
+  };
+
   #setInnnerHandlers = () => {
     this.element
       .querySelectorAll('.film-details__emoji-label')
