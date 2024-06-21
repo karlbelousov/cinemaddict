@@ -53,6 +53,11 @@ const Method = {
   DELETE: 'DELETE',
 };
 
+const TimeLimit = {
+  LOWER_LIMIT: 350,
+  UPPER_LIMIT: 1500,
+};
+
 export {
   FILMS_COUNT_PER_STEP,
   MAX_COMMENTS_ON_FILM,
@@ -65,5 +70,6 @@ export {
   DESCRIPTION_MAX,
   UpdateType,
   UserAction,
-  Method
+  Method,
+  TimeLimit
 };

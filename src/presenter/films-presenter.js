@@ -5,6 +5,7 @@ import FilmsListContainerView from '../view/films-list-container-view.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
 import FilmListEmptyView from '../view/film-list-empty-view.js';
 import LoadingView from '../view/loading-view.js';
+import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 
 import FilmPresenter from './film-presenter.js';
 import FilmDetailsPresenter from './film-details-presenter.js';
@@ -12,8 +13,7 @@ import FilmDetailsPresenter from './film-details-presenter.js';
 import {render, remove, replace} from '../framework/render.js';
 import { sortFilmsByDate, sortFilmsByRating } from '../utils/film.js';
 import {filter} from '../utils/filter.js';
-import { FILMS_COUNT_PER_STEP, SortType, UpdateType, UserAction, FilterType } from '../const.js';
-
+import { FILMS_COUNT_PER_STEP, SortType, UpdateType, UserAction, FilterType, TimeLimit } from '../const.js';
 export default class FilmsPresenter {
   #sortComponent = null;
   #films = new FilmsView();
@@ -31,6 +31,7 @@ export default class FilmsPresenter {
   #selectedFilm = null;
   #currentSortType = SortType.DEFAULT;
   #isLoading = true;
+  #uiBlocker = new UiBlocker(TimeLimit.LOWER_LIMIT, TimeLimit.UPPER_LIMIT);
 
   #filmPresenter = new Map();
   #filmDetailsPresenter = null;
@@ -69,6 +70,8 @@ export default class FilmsPresenter {
   };
 
   #handleViewAction = async(actionType, updateType, updateFilm, updateComment) => {
+    this.#uiBlocker.block();
+
     switch (actionType) {
       case UserAction.UPDATE_FILM:
         if (this.#filmPresenter.get(updateFilm.id) && !this.#filmDetailsPresenter) {
@@ -91,7 +94,6 @@ export default class FilmsPresenter {
           }
         }
         break;
-
       case UserAction.DELETE_COMMENT:
         this.#filmDetailsPresenter.setCommentDeleting(updateComment.id);
         try {
@@ -110,6 +112,8 @@ export default class FilmsPresenter {
         }
         break;
     }
+
+    this.#uiBlocker.unblock();
   };
 
   #handleModelEvent = (updateType, data) => {
