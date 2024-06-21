@@ -68,16 +68,26 @@ export default class FilmsPresenter {
     this.#renderFilmBoard();
   };
 
-  #handleViewAction = async (actionType, updateType, updateFilm, updateComment) => {
+  #handleViewAction = (actionType, updateType, updateFilm, updateComment) => {
     switch (actionType) {
       case UserAction.UPDATE_FILM:
-        await this.#filmsModel.updateOnServer(updateType, updateFilm);
+        if (this.#filmPresenter.get(updateFilm.id) && !this.#filmDetailsPresenter) {
+          this.#filmPresenter.get(updateFilm.id).setFilmUpdated();
+        }
+
+        if (this.#filmDetailsPresenter) {
+          this.#filmDetailsPresenter.setFilmUpdated();
+        }
+
+        this.#filmsModel.updateOnServer(updateType, updateFilm);
         break;
       case UserAction.DELETE_COMMENT:
-        await this.#commentsModel.delete(updateType, updateFilm, updateComment);
+        this.#filmDetailsPresenter.setCommentDeleting(updateComment.id);
+        this.#commentsModel.delete(updateType, updateFilm, updateComment);
         break;
       case UserAction.ADD_COMMENT:
-        await this.#commentsModel.add(updateType, updateFilm, updateComment);
+        this.#filmDetailsPresenter.setCommentCreating();
+        this.#commentsModel.add(updateType, updateFilm, updateComment);
         this.#filmDetailsPresenter.clearViewData();
     }
   };

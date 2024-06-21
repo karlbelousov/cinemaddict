@@ -48,6 +48,12 @@ export default class FilmPresenter {
     remove(this.#filmCard);
   };
 
+  setFilmUpdated = () => {
+    this.#filmCard.updateElement({
+      isDisabled: true
+    });
+  };
+
   #watchlistButtonHandler = () => {
     this.#changeData(
       UserAction.UPDATE_FILM,

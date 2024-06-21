@@ -80,6 +80,28 @@ export default class FilmDetailsPresenter  {
     });
   };
 
+  setFilmUpdated = () => {
+    this.#filmDetails.updateElement({
+      ...this.#viewData,
+      isFilmUpdated: true,
+    });
+  };
+
+  setCommentCreating = () => {
+    this.#filmDetails.updateElement({
+      ...this.#viewData,
+      isDisabled: true,
+    });
+  };
+
+  setCommentDeleting = (commentId) => {
+    this.#filmDetails.updateElement({
+      ...this.#viewData,
+      isDisabled: true,
+      deleteCommentId: commentId
+    });
+  };
+
   createComment = () => {
     this.#filmDetails.setCommentData();
 

@@ -1,5 +1,4 @@
-export const createFilmDetailsControlsTemplate = ({watchlist,  alreadyWatched, favorite}) => {
-  return `
+export const createFilmDetailsControlsTemplate = ({watchlist,  alreadyWatched, favorite}, isFilmUpdated) => `
   <section class="film-details__controls">
     <button
       type="button"
@@ -10,8 +9,8 @@ export const createFilmDetailsControlsTemplate = ({watchlist,  alreadyWatched, f
       "
       id="watchlist"
       name="watchlist"
-    >
-      Add to watchlist
+      ${isFilmUpdated ? 'disabled' : ''}
+    >Add to watchlist
     </button>
     <button
       type="button"
@@ -22,6 +21,7 @@ export const createFilmDetailsControlsTemplate = ({watchlist,  alreadyWatched, f
       "
       id="watched"
       name="watched"
+      ${isFilmUpdated ? 'disabled' : ''}
     >
       Already watched
     </button>
@@ -34,9 +34,9 @@ export const createFilmDetailsControlsTemplate = ({watchlist,  alreadyWatched, f
       "
       id="favorite"
       name="favorite"
+      ${isFilmUpdated ? 'disabled' : ''}
     >
       Add to favorites
     </button>
   </section>
-  `
-}
+  `;
